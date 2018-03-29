@@ -35,7 +35,7 @@ function parseSatelliteRow(row) {
 
     return {
         name: row["Current Official Name of Satellite"],
-        countryOperator: row["Country of Operator/Owner"],
+        countryOperator: row["Country of Operator/Owner"], //gdp
         countryContractor: row["Country of Contractor"],
         user: row["Users"],
         purpose: row["Purpose"],
