@@ -48,6 +48,10 @@ function parseSatelliteRow(row) {
 
 function satelliteCallback(err, data) {
     console.log(data);
+    var byCountry = d3.nest()
+        .key(function(d){return d.countryOperator;})
+        .entries(data);
+    console.log(byCountry);
 }
 
 // Load data from csv
