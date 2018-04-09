@@ -1,0 +1,14 @@
+/* main setup */
+#main {
+  overflow: hidden;
+}
+
+#left {
+  float: left; 
+  width: 75%;
+}
+
+#right {
+  float: right; 
+  width: 25%;
+}
