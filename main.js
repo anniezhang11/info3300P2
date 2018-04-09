@@ -24,6 +24,7 @@ function parseSatelliteRow(row) {
     var orbitsPerDay;
     var perigee, apogee, altitude;
     var country;
+    var massDiam;
     if (row["Country of Operator/Owner"] == "USA") {
         country = "United States";
     } else if (row["Country of Operator/Owner"] == "Russia") {
@@ -32,7 +33,7 @@ function parseSatelliteRow(row) {
         country = row["Country of Operator/Owner"];
     }
     if (row["Launch Mass (kg.)"] > 0) {
-        launchMass = row["Launch Mass (kg.)"];
+        launchMass = row["Launch Mass (kg.)"].replace("+","").replace(",","");
     } else {
         launchMass = "unknown";
     }
@@ -45,6 +46,22 @@ function parseSatelliteRow(row) {
     apogee = Number(row["Apogee (km)"].replace(",",""));
     altitude = (perigee + apogee)/2;
 
+    if (launchMass == "unknown") {
+        massDiam = 7;
+    } else if (Number(launchMass)>10000) {
+        massDiam = 11;
+    } else if (Number(launchMass) > 5000) {
+        massDiam = 9;
+    } else if (Number(launchMass) > 1000) {
+        massDiam = 7.5;
+    } else if (Number(launchMass) > 500) {
+        massDiam = 6;
+    } else if (Number(launchMass) > 100) {
+        massDiam = 4.5;
+    } else {
+        massDiam = 3;
+    }
+
     return {
         name: row["Current Official Name of Satellite"],
         countryOperator: country, //gdp
@@ -53,6 +70,7 @@ function parseSatelliteRow(row) {
         purpose: row["Purpose"],
         altitude: altitude,
         launchMass: launchMass,
+        massDiam: massDiam,
         launchDate: row["Date of Launch"],
         orbitsPerDay: orbitsPerDay
     }
@@ -91,7 +109,7 @@ function satelliteCallback(err, data) {
         }
         idx++;
     }
-    console.log(topTen);
+    // console.log(topTen);
 
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
@@ -102,16 +120,17 @@ function satelliteCallback(err, data) {
             numberSatellites: topTen[i].values.length,
             proportionSatellites: (topTen[i].values.length/totalSatellites),
             accumulateSatellites: acc,
-            gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]
+            gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016],
+            satellites: topTen[i].values
         };
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
-    console.log(topTenData);
+    // console.log(topTenData);
 
     var svg = d3.select("#gdpBars");
-    var padding = 10;
-        margin = {top: 20, right: 20, bottom: 20, left: 20},
+    var padding = 0;
+        margin = {top: 0, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
         height = document.getElementById("left").offsetHeight - margin.top - margin.bottom;
     var x = d3.scaleLinear().rangeRound([0, width]);
@@ -131,7 +150,23 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) {return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); });
 
+    drawSatellites(topTenData, x);
+}
 
+function drawSatellites(data, x_scale) {
+    console.log(data);
+    // for each country
+    var x_start, x_end, x_coord, y_coord;
+    var y_scale = d3.scaleLinear().rangeRound([1800,0]);
+    y_scale.domain([0, d3.max(data, function(d) { return d.altitude; })]);
+    data.forEach(element => {
+        x_start = x_scale(element.accumulateSatellites);
+        x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
+        element.satellites.forEach(satellite => {
+            x_coord = Math.random() * (x_end-x_start);
+            y_coord = y_scale(satellite.altitude);
+        });
+    });
 }
 
 // Load data from csv

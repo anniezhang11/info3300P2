@@ -18,9 +18,16 @@ svg {
   float:left;
 }
 
+#satellites {
+  background-color: #f4f4f4;
+  display: block;
+  width: 100%;
+  height: 1800px;
+}
+
 #gdpBars {
   background-color: #f7f7f7;
   display: block;
   width: 100%;
-  height: 400px;
+  height: 800px;
 }
