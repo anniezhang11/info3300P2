@@ -95,14 +95,17 @@ function satelliteCallback(err, data) {
 
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
+    var acc = 0;
     for (var i=0; i < 10; i++) {
         thisCountryData = {
             name: topTen[i].key,
             numberSatellites: topTen[i].values.length,
             proportionSatellites: (topTen[i].values.length/totalSatellites),
+            accumulateSatellites: acc,
             gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]
         };
         topTenData.push(thisCountryData);
+        acc += topTen[i].values.length/totalSatellites;
     }
     console.log(topTenData);
 
@@ -111,21 +114,21 @@ function satelliteCallback(err, data) {
         margin = {top: 20, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
         height = document.getElementById("left").offsetHeight - margin.top - margin.bottom;
-    var x = d3.scaleBand().rangeRound([0, width]);
+    var x = d3.scaleLinear().rangeRound([0, width]);
         y = d3.scaleLinear().rangeRound([height, 0]);
     var g = svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-    x.domain(topTenData.map(function(d) { return d.name; }));
+    x.domain([0, 1]);
     y.domain([0, d3.max(topTenData, function(d) { return d.gdp; })]);
 
     g.selectAll(".bar")
         .data(topTenData)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x(d.name); })
+        .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
-        .attr("width", x.bandwidth())
+        .attr("width", function(d) {return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); });
 
 
