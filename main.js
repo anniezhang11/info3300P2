@@ -227,13 +227,27 @@ function drawSatellites(data, x_scale) {
         // var ans = eval(var_name_str + "(300)");
         var this_y_scale = eval(var_name_str);
         if (i < 15) {
+            var offset = 30;
+            if (breakdowns[i+1] >= 10000) {
+                offset = 50;
+            } else if (breakdowns[i+1] >= 1000) {
+                offset = 40;
+            }
             g.append("line")
-                .attr("x1", 0)
+                .attr("x1", offset)
                 .attr("x2", width)
                 .attr("y1", this_y_scale(breakdowns[i+1]))
                 .attr("y2", this_y_scale(breakdowns[i+1]))
                 .attr("stroke", "#727276")
                 .attr("stroke-width", "2px");
+            g.append("text")
+                .attr("x", 0)
+                .attr("y", this_y_scale(breakdowns[i+1]))
+                .attr("text-anchor", "start")
+                .attr("alignment-baseline", "middle")
+                .attr("fill", "#727276")
+                .attr("font-family", "sans-serif")
+                .text(breakdowns[i+1].toString());
         }
         
     }
