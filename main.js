@@ -85,20 +85,18 @@ function parseSatelliteRow(row) {
         altitudeCategory = 7;
     } else if (altitude < 2000) {
         altitudeCategory = 8;
-    } else if (altitude < 5000) {
-        altitudeCategory = 9;
     } else if (altitude < 10000) {
-        altitudeCategory = 10;
+        altitudeCategory = 9;
     } else if (altitude < 20000) {
-        altitudeCategory = 11;
+        altitudeCategory = 10;
     } else if (altitude < 30000) {
-        altitudeCategory = 12;
+        altitudeCategory = 11;
     } else if (altitude < 40000) {
-        altitudeCategory = 13;
+        altitudeCategory = 12;
     } else if (altitude < 50000) {
-        altitudeCategory = 14;
+        altitudeCategory = 13;
     } else {
-        altitudeCategory = 15;
+        altitudeCategory = 14;
     }
 
     return {
@@ -182,6 +180,7 @@ function satelliteCallback(err, data) {
     x.domain([0, 1]);
     y.domain([0, d3.max(topTenData, function(d) { return d.gdp; })]);
 
+
     g.selectAll(".bar")
         .data(topTenData)
         .enter().append("rect")
@@ -201,7 +200,7 @@ function drawSatellites(data, x_scale) {
     // for each country
     var margin = {top: 20, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
-        height = 1800 - margin.top - margin.bottom;
+        height = 1840 - margin.top - margin.bottom;
 
     var svgSat = d3.select("#satellites");
     var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -215,10 +214,10 @@ function drawSatellites(data, x_scale) {
     }),0]);
 
     // y scales for each altitude section
-    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 150, 200, 200, 400, 150, 50];
-    var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 175000];
+    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 200, 200, 400, 150, 200];
+    var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 10000, 20000, 30000, 40000, 50000, 175000];
     var var_name_str, var_val_str, rangeMax, rangeMin;
-    for (var i = 0; i < 16; i++) {
+    for (var i = 0; i < 15; i++) {
         var_name_str = "y_scale_" + breakdowns[i].toString() + "to" + breakdowns[i+1].toString();
         rangeMax = height - increments.slice(0, i+1).reduce(arrSum);
         rangeMin = height - increments.slice(0, i+2).reduce(arrSum);
@@ -226,29 +225,29 @@ function drawSatellites(data, x_scale) {
         eval(var_name_str + " = " + var_val_str);
         // var ans = eval(var_name_str + "(300)");
         var this_y_scale = eval(var_name_str);
-        if (i < 15) {
-            var offset = 30;
-            if (breakdowns[i+1] >= 10000) {
-                offset = 50;
-            } else if (breakdowns[i+1] >= 1000) {
-                offset = 40;
-            }
-            g.append("line")
-                .attr("x1", offset)
-                .attr("x2", width)
-                .attr("y1", this_y_scale(breakdowns[i+1]))
-                .attr("y2", this_y_scale(breakdowns[i+1]))
-                .attr("stroke", "#727276")
-                .attr("stroke-width", "2px");
-            g.append("text")
-                .attr("x", 0)
-                .attr("y", this_y_scale(breakdowns[i+1]))
-                .attr("text-anchor", "start")
-                .attr("alignment-baseline", "middle")
-                .attr("fill", "#727276")
-                .attr("font-family", "sans-serif")
-                .text(breakdowns[i+1].toString());
+        var offset = 30;
+        if (breakdowns[i+1] >= 100000) {
+            offset = 60;
+        } else if (breakdowns[i+1] >= 10000) {
+            offset = 50;
+        } else if (breakdowns[i+1] >= 1000) {
+            offset = 40;
         }
+        g.append("line")
+            .attr("x1", offset)
+            .attr("x2", width)
+            .attr("y1", this_y_scale(breakdowns[i+1]))
+            .attr("y2", this_y_scale(breakdowns[i+1]))
+            .attr("stroke", "#727276")
+            .attr("stroke-width", "2px");
+        g.append("text")
+            .attr("x", 0)
+            .attr("y", this_y_scale(breakdowns[i+1]))
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .attr("fill", "#727276")
+            .attr("font-family", "sans-serif")
+            .text(breakdowns[i+1].toString());
         
     }
 
