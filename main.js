@@ -44,7 +44,7 @@ function parseSatelliteRow(row) {
     }
     perigee = Number(row["Perigee (km)"].replace(",",""));
     apogee = Number(row["Apogee (km)"].replace(",",""));
-    altitude = (perigee + apogee)/2;
+    altitude = (Number(perigee) + Number(apogee))/2;
 
     if (launchMass == "unknown") {
         massDiam = 7;
@@ -128,14 +128,14 @@ function satelliteCallback(err, data) {
     }
     // console.log(topTenData);
 
-    var svg = d3.select("#gdpBars");
+    var svgBars = d3.select("#gdpBars");
     var padding = 0;
         margin = {top: 0, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
         height = document.getElementById("left").offsetHeight - margin.top - margin.bottom;
     var x = d3.scaleLinear().rangeRound([0, width]);
         y = d3.scaleLinear().rangeRound([height, 0]);
-    var g = svg.append("g")
+    var g = svgBars.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     x.domain([0, 1]);
@@ -156,8 +156,10 @@ function satelliteCallback(err, data) {
 function drawSatellites(data, x_scale) {
     console.log(data);
     // for each country
+    var svgSat = d3.select("#satellites");
     var x_start, x_end, x_coord, y_coord;
-    var y_scale = d3.scaleLinear().rangeRound([1800,0]);
+    var y_scale = d3.scaleLinear()
+            .rangeRound([1800,0]);
     y_scale.domain([0, d3.max(data, function(d) { return d.altitude; })]);
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
@@ -165,6 +167,16 @@ function drawSatellites(data, x_scale) {
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start);
             y_coord = y_scale(satellite.altitude);
+            console.log("y_coord="+ y_coord);
+            if(satellite.purpose == "Commercial"){
+                svgSat.append("circle")
+                    .attr("cx", x_coord)
+                    .attr("cy", y_coord)
+                    .attr("r", (satellite.massDiam/2))
+                    .attr("fill", red)
+                    .attr("stroke", red);
+                    //we can add attributes and styles here
+            }
         });
     });
 }
