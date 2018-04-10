@@ -202,6 +202,46 @@ function drawSatellites(data, x_scale) {
                 svgSat.append("path")
                     .attr("d", lineFunction(lineData));
             }
+            else if (satellite.user == "Military"){
+                svgSat.append("rect")
+                    .attr("x", (x_coord-(satellite.massDiam/2)))
+                    .attr("y", (y_coord-(satellite.massDiam/2)))
+                    .attr("width", satellite.massDiam)
+                    .attr("height", satellite.massDiam)
+                    .attr("fill", "blue")
+                    .attr("stroke", "blue");
+            }
+            else if (satellite.user == "Government"){
+                svgSat.append("rect")
+                    .attr("x", (x_coord-(satellite.massDiam/2)))
+                    .attr("y", (y_coord-(satellite.massDiam/2)))
+                    .attr("width", satellite.massDiam)
+                    .attr("height", satellite.massDiam)
+                    .attr("fill", "green")
+                    .attr("stroke", "green")
+                    .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')');
+            }
+            else {
+                var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
+                var y1 = y_coord + hHex;
+                var x1 = x_coord - (hHex/2);
+                var y2 = y_coord;
+                var x2 = x_coord - satellite.massDiam;
+                var y3 = y_coord - hHex;
+                var x3 = x_coord - (hHex/2);
+                var y4 = y_coord - hHex;
+                var x4 = x_coord + (hHex/2);
+                var y5 = y_coord;
+                var x5 = x_coord +satellite.massDiam;
+                var y6 = y_coord + hHex;
+                var x6 = x_coord + (hHex/2);
+                var hexLineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}, {"x":x4, "y":y4}, {"x":x5, "y":y5}, {"x":x6, "y":y6}];
+                var hexFunction = d3.line()
+                    .x(function(d) { return d.x; })
+                    .y(function(s) { return s.y; });
+                svgSat.append("path")
+                    .attr("d", hexFunction(hexLineData));
+            }
         });
     });
 }
