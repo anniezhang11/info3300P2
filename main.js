@@ -180,7 +180,6 @@ function satelliteCallback(err, data) {
     x.domain([0, 1]);
     y.domain([0, d3.max(topTenData, function(d) { return d.gdp; })]);
 
-
     g.selectAll(".bar")
         .data(topTenData)
         .enter().append("rect")
@@ -205,16 +204,10 @@ function satelliteCallback(err, data) {
                 .text(d.proportionSatellites*100);
             d3.select("#gdp")
                 .text((d.gdp/1000000000).toFixed(2));
-
-
             d3.select("#bartooltip").classed("hidden", false);
-
         })
         .on("mouseout", function() {
-
-
             d3.select("#bartooltip").classed("hidden", true);
-
         });
 
     drawSatellites(topTenData, x);
