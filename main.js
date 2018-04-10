@@ -154,6 +154,7 @@ function satelliteCallback(err, data) {
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
+    var colors = ["#761f55", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1"];
     for (var i=0; i < 10; i++) {
         thisCountryData = {
             name: topTen[i].key,
@@ -161,20 +162,20 @@ function satelliteCallback(err, data) {
             proportionSatellites: (topTen[i].values.length/totalSatellites),
             accumulateSatellites: acc,
             gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016],
-            satellites: topTen[i].values
+            satellites: topTen[i].values, 
+            color: colors[i]
         };
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
-    // console.log(topTenData);
 
     var svgBars = d3.select("#gdpBars");
     var padding = 0;
         margin = {top: 0, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
-        height = document.getElementById("left").offsetHeight - margin.top - margin.bottom;
-    var x = d3.scaleLinear().rangeRound([0, width]);
-        y = d3.scaleLinear().rangeRound([height, 0]);
+        height = 1000 - margin.top - margin.bottom;
+    var x = d3.scaleLinear().range([0, width]);
+        y = d3.scaleLinear().range([height, 0]);
     var g = svgBars.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
@@ -187,8 +188,10 @@ function satelliteCallback(err, data) {
         .attr("class", "bar")
         .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
-        .attr("width", function(d) {return x(d.proportionSatellites);})
-        .attr("height", function(d) { return height - y(d.gdp); });
+        .attr("width", function(d) { return x(d.proportionSatellites);})
+        .attr("height", function(d) { return height - y(d.gdp); })
+        .attr("fill", function(d) { return d.color; })
+        .attr("opacity", 0.9);
 
     drawSatellites(topTenData, x);
 }
@@ -196,16 +199,19 @@ function satelliteCallback(err, data) {
 function drawSatellites(data, x_scale) {
     console.log(data);
     // for each country
+    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+        width = document.getElementById("left").offsetWidth - margin.left - margin.right,
+        height = 1800 - margin.top - margin.bottom;
+
     var svgSat = d3.select("#satellites");
+    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     var x_start, x_end, x_coord, y_coord;
     var y_scale = d3.scaleLinear()
             .rangeRound([1800,0]);
     y_scale.domain([d3.max(data, function(d) { 
-        var max = d3.max(d.satellites, function(s) {
+        return d3.max(d.satellites, function(s) {
             return s.altitude;
         });
-        console.log(max);
-        return max;
     }),0]);
 
     // y scales for each altitude section
@@ -214,11 +220,22 @@ function drawSatellites(data, x_scale) {
     var var_name_str, var_val_str, rangeMax, rangeMin;
     for (var i = 0; i < 16; i++) {
         var_name_str = "y_scale_" + breakdowns[i].toString() + "to" + breakdowns[i+1].toString();
-        rangeMax = 1800 - increments.slice(0, i+1).reduce(arrSum);
-        rangeMin = 1800 - increments.slice(0, i+2).reduce(arrSum);
+        rangeMax = height - increments.slice(0, i+1).reduce(arrSum);
+        rangeMin = height - increments.slice(0, i+2).reduce(arrSum);
         var_val_str = "d3.scaleLinear().range(["+ rangeMax +","+ rangeMin +"]).domain([" + breakdowns[i] + "," + breakdowns[i+1] + "])";
         eval(var_name_str + " = " + var_val_str);
         // var ans = eval(var_name_str + "(300)");
+        var this_y_scale = eval(var_name_str);
+        if (i < 15) {
+            g.append("line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", this_y_scale(breakdowns[i+1]))
+                .attr("y2", this_y_scale(breakdowns[i+1]))
+                .attr("stroke", "#727276")
+                .attr("stroke-width", "2px");
+        }
+        
     }
 
     data.forEach(element => {
@@ -229,18 +246,14 @@ function drawSatellites(data, x_scale) {
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
-            // console.log(satellite.altitude);
-            // console.log("altitude="+satellite.altitude);
-            // console.log("y_coord="+ y_coord);
-            // console.log(satellite.massDiam/2);
             if(satellite.user == "Commercial"){
-                svgSat.append("circle")
+                g.append("circle")
                     .attr("cx", x_coord)
                     .attr("cy", y_coord)
                     .attr("r", (satellite.massDiam/2))
-                    .attr("fill", "red")
-                    .attr("stroke", "red");
-                    //we can add attributes and styles here
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr("opacity", 0.7);
             }else if(satellite.user == "Civil"){
 //                 <polygon fill="yellow" stroke="blue" stroke-width="2"
 // 3    points="05,30
@@ -253,32 +266,35 @@ function drawSatellites(data, x_scale) {
                 var y2 = y_coord-(h/2);
                 var x3 = x_coord+(satellite.massDiam/2);
                 var y3 = y_coord+(h/2);
-                // console.log("x1="+ x1);
                 var lineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}];
                 var lineFunction = d3.line()
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
-                svgSat.append("path")
-                    .attr("d", lineFunction(lineData));
+                g.append("path")
+                    .attr("d", lineFunction(lineData))
+                    .attr("fill", element.color)
+                    .attr("opacity", 0.7);
             }
             else if (satellite.user == "Military"){
-                svgSat.append("rect")
+                g.append("rect")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
                     .attr("width", satellite.massDiam)
                     .attr("height", satellite.massDiam)
-                    .attr("fill", "blue")
-                    .attr("stroke", "blue");
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr("opacity", 0.7);
             }
             else if (satellite.user == "Government"){
-                svgSat.append("rect")
+                g.append("rect")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
                     .attr("width", satellite.massDiam)
                     .attr("height", satellite.massDiam)
-                    .attr("fill", "green")
-                    .attr("stroke", "green")
-                    .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')');
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')')
+                    .attr("opacity", 0.7);
             }
             else {
                 var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
@@ -298,8 +314,10 @@ function drawSatellites(data, x_scale) {
                 var hexFunction = d3.line()
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
-                svgSat.append("path")
-                    .attr("d", hexFunction(hexLineData));
+                g.append("path")
+                    .attr("d", hexFunction(hexLineData))
+                    .attr("fill", element.color)
+                    .attr("opacity", 0.7);
             }
         });
     });
