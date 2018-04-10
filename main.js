@@ -209,7 +209,7 @@ function drawSatellites(data, x_scale) {
     }),0]);
 
     // y scales for each altitude section
-    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 150, 200, 200, 200, 200, 200];
+    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 150, 200, 200, 400, 150, 50];
     var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 175000];
     var var_name_str, var_val_str, rangeMax, rangeMin;
     for (var i = 0; i < 16; i++) {
