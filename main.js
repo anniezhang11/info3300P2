@@ -2,6 +2,10 @@ var gdpData;
 var satelliteData;
 var topTenData = [];
 
+function arrSum(total, num) {
+    return total + num;
+}
+
 function parseGdpRow(row) {
     var gdpDict = {};
     for(var i = 1960; i<2017; i++){
@@ -24,6 +28,8 @@ function parseSatelliteRow(row) {
     var orbitsPerDay;
     var perigee, apogee, altitude;
     var country;
+    var massDiam;
+    var altitudeCategory;
     if (row["Country of Operator/Owner"] == "USA") {
         country = "United States";
     } else if (row["Country of Operator/Owner"] == "Russia") {
@@ -32,7 +38,7 @@ function parseSatelliteRow(row) {
         country = row["Country of Operator/Owner"];
     }
     if (row["Launch Mass (kg.)"] > 0) {
-        launchMass = row["Launch Mass (kg.)"];
+        launchMass = row["Launch Mass (kg.)"].replace("+","").replace(",","");
     } else {
         launchMass = "unknown";
     }
@@ -43,7 +49,55 @@ function parseSatelliteRow(row) {
     }
     perigee = Number(row["Perigee (km)"].replace(",",""));
     apogee = Number(row["Apogee (km)"].replace(",",""));
-    altitude = (perigee + apogee)/2;
+    altitude = (Number(perigee) + Number(apogee))/2;
+
+    if (launchMass == "unknown") {
+        massDiam = 15;
+    } else if (Number(launchMass)>10000) {
+        massDiam = 21;
+    } else if (Number(launchMass) > 5000) {
+        massDiam = 18;
+    } else if (Number(launchMass) > 1000) {
+        massDiam = 15;
+    } else if (Number(launchMass) > 500) {
+        massDiam = 12;
+    } else if (Number(launchMass) > 100) {
+        massDiam = 9;
+    } else {
+        massDiam = 6;
+    }
+
+    if (altitude < 300) {
+        altitudeCategory = 0;
+    } else if (altitude < 400) {
+        altitudeCategory = 1;
+    } else if (altitude < 500) {
+        altitudeCategory = 2;
+    } else if (altitude < 600) {
+        altitudeCategory = 3;
+    } else if (altitude < 700) {
+        altitudeCategory = 4;
+    } else if (altitude < 800) {
+        altitudeCategory = 5;
+    } else if (altitude < 900) {
+        altitudeCategory = 6;
+    } else if (altitude < 1000) {
+        altitudeCategory = 7;
+    } else if (altitude < 2000) {
+        altitudeCategory = 8;
+    } else if (altitude < 10000) {
+        altitudeCategory = 9;
+    } else if (altitude < 20000) {
+        altitudeCategory = 10;
+    } else if (altitude < 30000) {
+        altitudeCategory = 11;
+    } else if (altitude < 40000) {
+        altitudeCategory = 12;
+    } else if (altitude < 50000) {
+        altitudeCategory = 13;
+    } else {
+        altitudeCategory = 14;
+    }
 
     return {
         name: row["Current Official Name of Satellite"],
@@ -52,7 +106,9 @@ function parseSatelliteRow(row) {
         user: row["Users"],
         purpose: row["Purpose"],
         altitude: altitude,
+        altitudeCategory: altitudeCategory,
         launchMass: launchMass,
+        massDiam: massDiam,
         launchDate: row["Date of Launch"],
         orbitsPerDay: orbitsPerDay
     }
@@ -91,32 +147,34 @@ function satelliteCallback(err, data) {
         }
         idx++;
     }
-    console.log(topTen);
+    // console.log(topTen);
 
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
+    var colors = ["#761f55", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1"];
     for (var i=0; i < 10; i++) {
         thisCountryData = {
             name: topTen[i].key,
             numberSatellites: topTen[i].values.length,
             proportionSatellites: (topTen[i].values.length/totalSatellites),
             accumulateSatellites: acc,
-            gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]
+            gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]),
+            satellites: topTen[i].values, 
+            color: colors[i]
         };
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
-    console.log(topTenData);
 
-    var svg = d3.select("#gdpBars");
-    var padding = 10;
-        margin = {top: 20, right: 20, bottom: 20, left: 20},
+    var svgBars = d3.select("#gdpBars");
+    var padding = 0;
+        margin = {top: 0, right: 20, bottom: 20, left: 20},
         width = document.getElementById("left").offsetWidth - margin.left - margin.right,
-        height = document.getElementById("left").offsetHeight - margin.top - margin.bottom;
-    var x = d3.scaleLinear().rangeRound([0, width]);
-        y = d3.scaleLinear().rangeRound([height, 0]);
-    var g = svg.append("g")
+        height = 1000 - margin.top - margin.bottom;
+    var x = d3.scaleLinear().range([0, width]);
+        y = d3.scaleLinear().range([height, 0]);
+    var g = svgBars.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     x.domain([0, 1]);
@@ -128,10 +186,172 @@ function satelliteCallback(err, data) {
         .attr("class", "bar")
         .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
-        .attr("width", function(d) {return x(d.proportionSatellites);})
-        .attr("height", function(d) { return height - y(d.gdp); });
+        .attr("width", function(d) { return x(d.proportionSatellites);})
+        .attr("height", function(d) { return height - y(d.gdp); })
+        .attr("fill", function(d) { return d.color; })
+        .attr("opacity", 0.9)
+        .on("mouseover", function(d) {
+            var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
+            var yPosition = height + y(0);
+            d3.select("#bartooltip")
+                .style("left", xPosition + "px")
+                .style("top", yPosition + "px")
+            d3.select("#country")
+                .text(d.name);
+            d3.select("#numsats")
+                .text(d.numberSatellites);
+            d3.select("#propsats")
+                .text(d.proportionSatellites*100);
+            d3.select("#gdp")
+                .text((d.gdp/1000000000).toFixed(2));
+            d3.select("#bartooltip").classed("hidden", false);
+        })
+        .on("mouseout", function() {
+            d3.select("#bartooltip").classed("hidden", true);
+        });
 
+    drawSatellites(topTenData, x);
+}
 
+function drawSatellites(data, x_scale) {
+    console.log(data);
+    // for each country
+    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+        width = document.getElementById("left").offsetWidth - margin.left - margin.right,
+        height = 1840 - margin.top - margin.bottom;
+
+    var svgSat = d3.select("#satellites");
+    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var x_start, x_end, x_coord, y_coord;
+    var y_scale = d3.scaleLinear()
+            .rangeRound([1800,0]);
+    y_scale.domain([d3.max(data, function(d) { 
+        return d3.max(d.satellites, function(s) {
+            return s.altitude;
+        });
+    }),0]);
+
+    // y scales for each altitude section
+    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 200, 200, 400, 150, 200];
+    var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 10000, 20000, 30000, 40000, 50000, 175000];
+    var var_name_str, var_val_str, rangeMax, rangeMin;
+    for (var i = 0; i < 15; i++) {
+        var_name_str = "y_scale_" + breakdowns[i].toString() + "to" + breakdowns[i+1].toString();
+        rangeMax = height - increments.slice(0, i+1).reduce(arrSum);
+        rangeMin = height - increments.slice(0, i+2).reduce(arrSum);
+        var_val_str = "d3.scaleLinear().range(["+ rangeMax +","+ rangeMin +"]).domain([" + breakdowns[i] + "," + breakdowns[i+1] + "])";
+        eval(var_name_str + " = " + var_val_str);
+        // var ans = eval(var_name_str + "(300)");
+        var this_y_scale = eval(var_name_str);
+        var offset = 30;
+        if (breakdowns[i+1] >= 100000) {
+            offset = 60;
+        } else if (breakdowns[i+1] >= 10000) {
+            offset = 50;
+        } else if (breakdowns[i+1] >= 1000) {
+            offset = 40;
+        }
+        g.append("line")
+            .attr("x1", offset)
+            .attr("x2", width)
+            .attr("y1", this_y_scale(breakdowns[i+1]))
+            .attr("y2", this_y_scale(breakdowns[i+1]))
+            .attr("stroke", "#727276")
+            .attr("stroke-width", "2px");
+        g.append("text")
+            .attr("x", 0)
+            .attr("y", this_y_scale(breakdowns[i+1]))
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .attr("fill", "#727276")
+            .attr("font-family", "sans-serif")
+            .text(breakdowns[i+1].toString());
+        
+    }
+
+    data.forEach(element => {
+        x_start = x_scale(element.accumulateSatellites);
+        x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
+        element.satellites.forEach(satellite => {
+            x_coord = Math.random() * (x_end-x_start) + x_start;
+            var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
+            var this_y_scale = eval(var_name_str);
+            y_coord = this_y_scale(satellite.altitude);
+            if(satellite.user == "Commercial"){
+                g.append("circle")
+                    .attr("cx", x_coord)
+                    .attr("cy", y_coord)
+                    .attr("r", (satellite.massDiam/2))
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr("opacity", 0.7);
+            }else if(satellite.user == "Civil"){
+//                 <polygon fill="yellow" stroke="blue" stroke-width="2"
+// 3    points="05,30
+// 4            15,10
+// 5            25,30" />
+                var x1 = x_coord-(satellite.massDiam/2);
+                var h = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
+                var y1 = y_coord+(h/2);
+                var x2 = x_coord;
+                var y2 = y_coord-(h/2);
+                var x3 = x_coord+(satellite.massDiam/2);
+                var y3 = y_coord+(h/2);
+                var lineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}];
+                var lineFunction = d3.line()
+                    .x(function(d) { return d.x; })
+                    .y(function(s) { return s.y; });
+                g.append("path")
+                    .attr("d", lineFunction(lineData))
+                    .attr("fill", element.color)
+                    .attr("opacity", 0.7);
+            }
+            else if (satellite.user == "Military"){
+                g.append("rect")
+                    .attr("x", (x_coord-(satellite.massDiam/2)))
+                    .attr("y", (y_coord-(satellite.massDiam/2)))
+                    .attr("width", satellite.massDiam)
+                    .attr("height", satellite.massDiam)
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr("opacity", 0.7);
+            }
+            else if (satellite.user == "Government"){
+                g.append("rect")
+                    .attr("x", (x_coord-(satellite.massDiam/2)))
+                    .attr("y", (y_coord-(satellite.massDiam/2)))
+                    .attr("width", satellite.massDiam)
+                    .attr("height", satellite.massDiam)
+                    .attr("fill", element.color)
+                    .attr("stroke", element.color)
+                    .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')')
+                    .attr("opacity", 0.7);
+            }
+            else {
+                var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
+                var y1 = y_coord + hHex;
+                var x1 = x_coord - (hHex/2);
+                var y2 = y_coord;
+                var x2 = x_coord - satellite.massDiam;
+                var y3 = y_coord - hHex;
+                var x3 = x_coord - (hHex/2);
+                var y4 = y_coord - hHex;
+                var x4 = x_coord + (hHex/2);
+                var y5 = y_coord;
+                var x5 = x_coord +satellite.massDiam;
+                var y6 = y_coord + hHex;
+                var x6 = x_coord + (hHex/2);
+                var hexLineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}, {"x":x4, "y":y4}, {"x":x5, "y":y5}, {"x":x6, "y":y6}];
+                var hexFunction = d3.line()
+                    .x(function(d) { return d.x; })
+                    .y(function(s) { return s.y; });
+                g.append("path")
+                    .attr("d", hexFunction(hexLineData))
+                    .attr("fill", element.color)
+                    .attr("opacity", 0.7);
+            }
+        });
+    });
 }
 
 // Load data from csv
