@@ -159,7 +159,7 @@ function satelliteCallback(err, data) {
             numberSatellites: topTen[i].values.length,
             proportionSatellites: (topTen[i].values.length/totalSatellites),
             accumulateSatellites: acc,
-            gdp: gdpData.find(x => x.countryName == topTen[i].key).GDP[2016],
+            gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]),
             satellites: topTen[i].values, 
             color: colors[i]
         };
@@ -190,7 +190,32 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) { return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); })
         .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.9);
+        .attr("opacity", 0.9)
+        .on("mouseover", function(d) {
+            var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
+            var yPosition = height + y(0);
+            d3.select("#bartooltip")
+                .style("left", xPosition + "px")
+                .style("top", yPosition + "px")
+            d3.select("#country")
+                .text(d.name);
+            d3.select("#numsats")
+                .text(d.numberSatellites);
+            d3.select("#propsats")
+                .text(d.proportionSatellites*100);
+            d3.select("#gdp")
+                .text((d.gdp/1000000000).toFixed(2));
+
+
+            d3.select("#bartooltip").classed("hidden", false);
+
+        })
+        .on("mouseout", function() {
+
+
+            d3.select("#bartooltip").classed("hidden", true);
+
+        });
 
     drawSatellites(topTenData, x);
 }
