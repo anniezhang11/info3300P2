@@ -2,6 +2,10 @@ var gdpData;
 var satelliteData;
 var topTenData = [];
 
+function arrSum(total, num) {
+    return total + num;
+}
+
 function parseGdpRow(row) {
     var gdpDict = {};
     for(var i = 1960; i<2017; i++){
@@ -25,6 +29,7 @@ function parseSatelliteRow(row) {
     var perigee, apogee, altitude;
     var country;
     var massDiam;
+    var altitudeCategory;
     if (row["Country of Operator/Owner"] == "USA") {
         country = "United States";
     } else if (row["Country of Operator/Owner"] == "Russia") {
@@ -62,6 +67,40 @@ function parseSatelliteRow(row) {
         massDiam = 6;
     }
 
+    if (altitude < 300) {
+        altitudeCategory = 0;
+    } else if (altitude < 400) {
+        altitudeCategory = 1;
+    } else if (altitude < 500) {
+        altitudeCategory = 2;
+    } else if (altitude < 600) {
+        altitudeCategory = 3;
+    } else if (altitude < 700) {
+        altitudeCategory = 4;
+    } else if (altitude < 800) {
+        altitudeCategory = 5;
+    } else if (altitude < 900) {
+        altitudeCategory = 6;
+    } else if (altitude < 1000) {
+        altitudeCategory = 7;
+    } else if (altitude < 2000) {
+        altitudeCategory = 8;
+    } else if (altitude < 5000) {
+        altitudeCategory = 9;
+    } else if (altitude < 10000) {
+        altitudeCategory = 10;
+    } else if (altitude < 20000) {
+        altitudeCategory = 11;
+    } else if (altitude < 30000) {
+        altitudeCategory = 12;
+    } else if (altitude < 40000) {
+        altitudeCategory = 13;
+    } else if (altitude < 50000) {
+        altitudeCategory = 14;
+    } else {
+        altitudeCategory = 15;
+    }
+
     return {
         name: row["Current Official Name of Satellite"],
         countryOperator: country, //gdp
@@ -69,6 +108,7 @@ function parseSatelliteRow(row) {
         user: row["Users"],
         purpose: row["Purpose"],
         altitude: altitude,
+        altitudeCategory: altitudeCategory,
         launchMass: launchMass,
         massDiam: massDiam,
         launchDate: row["Date of Launch"],
@@ -161,16 +201,35 @@ function drawSatellites(data, x_scale) {
     var y_scale = d3.scaleLinear()
             .rangeRound([1800,0]);
     y_scale.domain([d3.max(data, function(d) { 
-        return d3.max(d.satellites, function(s) {
+        var max = d3.max(d.satellites, function(s) {
             return s.altitude;
         });
-     }),0]);
+        console.log(max);
+        return max;
+    }),0]);
+
+    // y scales for each altitude section
+    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 150, 200, 200, 200, 200, 200];
+    var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 175000];
+    var var_name_str, var_val_str, rangeMax, rangeMin;
+    for (var i = 0; i < 16; i++) {
+        var_name_str = "y_scale_" + breakdowns[i].toString() + "to" + breakdowns[i+1].toString();
+        rangeMax = 1800 - increments.slice(0, i+1).reduce(arrSum);
+        rangeMin = 1800 - increments.slice(0, i+2).reduce(arrSum);
+        var_val_str = "d3.scaleLinear().range(["+ rangeMax +","+ rangeMin +"]).domain([" + breakdowns[i] + "," + breakdowns[i+1] + "])";
+        eval(var_name_str + " = " + var_val_str);
+        // var ans = eval(var_name_str + "(300)");
+    }
+
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
         x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
         element.satellites.forEach(satellite => {
-            x_coord = Math.random() * (x_end-x_start);
-            y_coord = y_scale(satellite.altitude);
+            x_coord = Math.random() * (x_end-x_start) + x_start;
+            var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
+            var this_y_scale = eval(var_name_str);
+            y_coord = this_y_scale(satellite.altitude);
+            // console.log(satellite.altitude);
             // console.log("altitude="+satellite.altitude);
             // console.log("y_coord="+ y_coord);
             // console.log(satellite.massDiam/2);
