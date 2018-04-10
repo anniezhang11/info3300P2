@@ -160,13 +160,18 @@ function drawSatellites(data, x_scale) {
     var x_start, x_end, x_coord, y_coord;
     var y_scale = d3.scaleLinear()
             .rangeRound([1800,0]);
-    y_scale.domain([0, d3.max(data, function(d) { return d.altitude; })]);
+    y_scale.domain([0, d3.max(data, function(d) { 
+        return d3.max(d.satellites, function(s) {
+            return s.altitude;
+        });
+     })]);
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
         x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start);
             y_coord = y_scale(satellite.altitude);
+            console.log("altitude="+satellite.altitude);
             console.log("y_coord="+ y_coord);
             if(satellite.purpose == "Commercial"){
                 svgSat.append("circle")
