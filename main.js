@@ -290,7 +290,7 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
                         var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
-                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                        if(xPosition > (document.getElementById("left").offsetWidth)/2){
                             xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
                         }
                         // console.log("xPos=" + xPosition);
