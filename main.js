@@ -288,8 +288,8 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
                         var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
-                        console.log("xPos=" + xPosition);
-                        console.log(parseFloat(d3.select(this).attr("cx")));
+                        // console.log("xPos=" + xPosition);
+                        // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -307,16 +307,14 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.launchDate);
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
+                        d3.select(this).attr("opacity", 1);
                         d3.select("#sattooltip").classed("hidden", false);
                     })
                     .on("mouseout", function() {
+                        d3.select(this).attr("opacity", .7);
                         d3.select("#sattooltip").classed("hidden", true);
                     });
             }else if(satellite.user == "Civil"){
-//                 <polygon fill="yellow" stroke="blue" stroke-width="2"
-// 3    points="05,30
-// 4            15,10
-// 5            25,30" />
                 var x1 = x_coord-(satellite.massDiam/2);
                 var h = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
                 var y1 = y_coord+(h/2);
@@ -331,7 +329,36 @@ function drawSatellites(data, x_scale) {
                 g.append("path")
                     .attr("d", lineFunction(lineData))
                     .attr("fill", element.color)
-                    .attr("opacity", 0.7);
+                    .attr("opacity", 0.7)
+                .on("mouseover", function() {
+                        var xPosition = parseFloat(x3) + 30;
+                        var yPosition = parseFloat(y3)  + 30;
+                        // console.log("xPos=" + xPosition);
+                        // console.log(parseFloat(d3.select(this).attr("cx")));
+                        d3.select("#sattooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                        d3.select("#countrySat")
+                            .text(satellite.countryOperator);
+                        d3.select("#name")
+                            .text(satellite.name);
+                        d3.select("#use")
+                            .text(satellite.user);
+                        d3.select("#altitude")
+                            .text(satellite.altitude);
+                        d3.select("#mass")
+                            .text(satellite.launchMass);
+                        d3.select("#launchDate")
+                            .text(satellite.launchDate);
+                        d3.select("#contractor")
+                            .text(satellite.countryContractor);
+                        d3.select(this).attr("opacity", 1);
+                        d3.select("#sattooltip").classed("hidden", false);
+                        })
+                        .on("mouseout", function() {
+                            d3.select(this).attr("opacity", .7);
+                            d3.select("#sattooltip").classed("hidden", true);
+                        });
             }
             else if (satellite.user == "Military"){
                 g.append("rect")
@@ -341,7 +368,36 @@ function drawSatellites(data, x_scale) {
                     .attr("height", satellite.massDiam)
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
-                    .attr("opacity", 0.7);
+                    .attr("opacity", 0.7)
+                    .on("mouseover", function() {
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
+                        var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        // console.log("xPos=" + xPosition);
+                        // console.log(parseFloat(d3.select(this).attr("cx")));
+                        d3.select("#sattooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                        d3.select("#countrySat")
+                            .text(satellite.countryOperator);
+                        d3.select("#name")
+                            .text(satellite.name);
+                        d3.select("#use")
+                            .text(satellite.user);
+                        d3.select("#altitude")
+                            .text(satellite.altitude);
+                        d3.select("#mass")
+                            .text(satellite.launchMass);
+                        d3.select("#launchDate")
+                            .text(satellite.launchDate);
+                        d3.select("#contractor")
+                            .text(satellite.countryContractor);
+                        d3.select(this).attr("opacity", 1);
+                        d3.select("#sattooltip").classed("hidden", false);
+                        })
+                        .on("mouseout", function() {
+                            d3.select(this).attr("opacity", .7);
+                            d3.select("#sattooltip").classed("hidden", true);
+                        });
             }
             else if (satellite.user == "Government"){
                 g.append("rect")
@@ -352,7 +408,36 @@ function drawSatellites(data, x_scale) {
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
                     .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')')
-                    .attr("opacity", 0.7);
+                    .attr("opacity", 0.7)
+                    .on("mouseover", function() {
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
+                        var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        // console.log("xPos=" + xPosition);
+                        // console.log(parseFloat(d3.select(this).attr("cx")));
+                        d3.select("#sattooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                        d3.select("#countrySat")
+                            .text(satellite.countryOperator);
+                        d3.select("#name")
+                            .text(satellite.name);
+                        d3.select("#use")
+                            .text(satellite.user);
+                        d3.select("#altitude")
+                            .text(satellite.altitude);
+                        d3.select("#mass")
+                            .text(satellite.launchMass);
+                        d3.select("#launchDate")
+                            .text(satellite.launchDate);
+                        d3.select("#contractor")
+                            .text(satellite.countryContractor);
+                        d3.select(this).attr("opacity", 1);
+                        d3.select("#sattooltip").classed("hidden", false);
+                        })
+                        .on("mouseout", function() {
+                            d3.select(this).attr("opacity", .7);
+                            d3.select("#sattooltip").classed("hidden", true);
+                        });
             }
             else {
                 var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
@@ -375,7 +460,34 @@ function drawSatellites(data, x_scale) {
                 g.append("path")
                     .attr("d", hexFunction(hexLineData))
                     .attr("fill", element.color)
-                    .attr("opacity", 0.7);
+                    .attr("opacity", 0.7)
+                        .on("mouseover", function() {
+                        var xPosition = parseFloat(x5) + 30;
+                        var yPosition = parseFloat(y5)  + 30;
+                        d3.select("#sattooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                        d3.select("#countrySat")
+                            .text(satellite.countryOperator);
+                        d3.select("#name")
+                            .text(satellite.name);
+                        d3.select("#use")
+                            .text(satellite.user);
+                        d3.select("#altitude")
+                            .text(satellite.altitude);
+                        d3.select("#mass")
+                            .text(satellite.launchMass);
+                        d3.select("#launchDate")
+                            .text(satellite.launchDate);
+                        d3.select("#contractor")
+                            .text(satellite.countryContractor);
+                        d3.select(this).attr("opacity", 1);
+                        d3.select("#sattooltip").classed("hidden", false);
+                        })
+                        .on("mouseout", function() {
+                            d3.select(this).attr("opacity", .7);
+                            d3.select("#sattooltip").classed("hidden", true);
+                        });
             }
         });
     });
