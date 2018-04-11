@@ -221,7 +221,7 @@ function drawSatellites(data, x_scale) {
         height = 1840 - margin.top - margin.bottom;
 
     var svgSat = d3.select("#satellites");
-    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("id", "satg");
     var x_start, x_end, x_coord, y_coord;
     var y_scale = d3.scaleLinear()
             .rangeRound([1800,0]);
@@ -288,6 +288,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
                         var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -333,7 +336,9 @@ function drawSatellites(data, x_scale) {
                 .on("mouseover", function() {
                         var xPosition = parseFloat(x3) + 30;
                         var yPosition = parseFloat(y3)  + 30;
-                        if(xPosition>)
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -373,6 +378,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
                         var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -413,6 +421,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
                         var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -462,9 +473,12 @@ function drawSatellites(data, x_scale) {
                     .attr("d", hexFunction(hexLineData))
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
-                        .on("mouseover", function() {
+                    .on("mouseover", function() {
                         var xPosition = parseFloat(x5) + 30;
                         var yPosition = parseFloat(y5)  + 30;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 250;
+                        }
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
