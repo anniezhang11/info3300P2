@@ -286,9 +286,10 @@ function drawSatellites(data, x_scale) {
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = x_coord;
-                        var yPosition = (y_coord-100);
+                        var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
                         console.log("xPos=" + xPosition);
+                        console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
