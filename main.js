@@ -338,7 +338,9 @@ function drawSatellites(data, x_scale) {
                 .on("mouseover", function() {
                         var xPosition = parseFloat(x3) + 30;
                         var yPosition = parseFloat(y3)  + 30;
+
                         if(xPosition> (document.getElementById("left").offsetWidth)/2){
+
                             xPosition = xPosition - 230;
                         }
                         // console.log("xPos=" + xPosition);
