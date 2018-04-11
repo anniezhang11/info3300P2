@@ -19,10 +19,20 @@
           <p>This visualization depicts satellites launched by the top ten countries of satellite ownership by count.
             <br>The graph can be toggled by satellite use or year of launch.
           </p>
+          <div class="userlegend">
+            <p>Commercial</p>
+            <p>Civil</p>
+            <p>Military</p>
+            <p>Government</p>
+            <p>Multiple</p>
+          </div>
+          <div class="slidercontainer">
+            <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
+          </div>
         </div>
     <div id="content"> 
-      <svg id="satellites"></svg>
-      <svg id="gdpBars"></svg>
+      <svg id="satellites" viewBox="0 0 1200 2000" preserveAspectRatio="xMidYMid meet"></svg>
+      <svg id="gdpBars" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
   </div>
   <div id="bartooltip" class="hidden">

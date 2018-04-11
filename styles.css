@@ -1,6 +1,7 @@
 /* main setup */
 body {
   background: #e2e1da;
+  text-anchor: "middle";
 }
 
 #main {
@@ -45,33 +46,56 @@ body {
   color: #e2e1da;
 }
 
+#slidercontainer {
+  width: 300px;
+}
+
+#yearslider {
+  -webkit-appearance: none;
+  width: 300px;
+  height: 5px;
+  background: #85858d;
+  outline: none; 
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  position: absolute;
+  right: 150px;
+  top: 250px;
+}
+
+#slider:hover {
+  opacity: 1;
+}
+
+#userlegend {
+  text-align: center;
+  transform: translateX(-200);
+}
+
 #content {
   float: left; 
   width: 100%;
   position: relative;
 }
 
-# svg {
-  float:left;
-}
-
 #satellites {
   background: linear-gradient(#2a2b4d, #18181b);
   display: block;
-  width: 100%;
-  height: 1840px;
+  margin-left: 0 auto; 
+  margin-right: 0 auto;
 }
 
 #gdpBars {
   background-color: #18181b;
   display: block;
-  width: 100%;
-  height: 1000px;
+  margin-left: 0 auto; 
+  margin-right: 0 auto;
 }
 
 #bartooltip {
   position: absolute;
-  width: 200px;
+  width: 180px;
   height: auto;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.85);

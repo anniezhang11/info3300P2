@@ -169,9 +169,9 @@ function satelliteCallback(err, data) {
 
     var svgBars = d3.select("#gdpBars");
     var padding = 0;
-        margin = {top: 0, right: 80, bottom: 80, left: 80},
-        width = document.getElementById("content").offsetWidth - margin.left - margin.right,
-        height = 1000 - margin.top - margin.bottom;
+        margin = {top: 0, right: 20, bottom: 20, left: 100},
+        width = 1000,
+        height = 800;
     var x = d3.scaleLinear().range([0, width]);
         y = d3.scaleLinear().range([height, 0]);
     var g = svgBars.append("g")
@@ -191,9 +191,10 @@ function satelliteCallback(err, data) {
         .attr("fill", function(d) { return d.color; })
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
-            var xPosition = document.getElementById("content").offsetWidth - (parseFloat(d3.select(this).attr("x"))) - (((parseFloat(d3.select(this).attr("width")))) / 2);
-            var yPosition = height + y(0);
-            console.log(xPosition);
+            var xPosition = 1000 - (parseFloat(d3.select(this).attr("x"))) - (((parseFloat(d3.select(this).attr("width")))) / 2);
+            var yPosition = 2100;
+            // var yPosition = parseFloat(d3.select(this).attr("y")) - 15;
+            // console.log(yPosition);
             d3.select("#bartooltip")
                 .style("right", xPosition + "px")
                 .style("top", yPosition + "px")
@@ -213,15 +214,27 @@ function satelliteCallback(err, data) {
             d3.select(this).attr("opacity", 0.7);
         });
 
+/*    g.selectAll(".bar")
+        .data(topTenData)
+        .enter().append("text")
+        .attr("x", function(d) { return x(d.accumulateSatellites); } + 5)
+        .style("font-family", "Rajdhani")
+		.style("font-size", "11px")
+		.style("fill", "#8C8C8B")
+		.style("alignment-baseline", "baseline")
+        .attr("transform", "rotate(90)")
+        .style("text-anchor", "start")
+		.text("test");
+*/
     drawSatellites(topTenData, x);
 }
 
 function drawSatellites(data, x_scale) {
     console.log(data);
     // for each country
-    var margin = {top: 80, right: 80, bottom: 20, left: 80},
-        width = document.getElementById("content").offsetWidth - margin.left - margin.right,
-        height = 1900 - margin.top - margin.bottom;
+    var margin = {top: 0, right: 20, bottom: 20, left: 100},
+        width = 1000,
+        height = 2000;
 
     var svgSat = d3.select("#satellites");
     var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("id", "satg");
@@ -262,7 +275,7 @@ function drawSatellites(data, x_scale) {
             .attr("stroke", "#85858d")
             .attr("stroke-width", "1px");
         g.append("text")
-            .attr("x", -10)
+            .attr("x", -15)
             .attr("y", this_y_scale(breakdowns[i+1]))
             .attr("text-anchor", "end")
             .attr("alignment-baseline", "middle")
@@ -290,8 +303,8 @@ function drawSatellites(data, x_scale) {
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
-                        var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 15;
+                        var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 15;
                         if(xPosition > (document.getElementById("content").offsetWidth)/2){
                             xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
                         }
@@ -514,6 +527,7 @@ function drawSatellites(data, x_scale) {
     });
 }
 
+var yearSlider = d3.select("#yearslider");
 // Create a d3 force simulation
 // var simulation = d3.forceSimulation();
 // simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
