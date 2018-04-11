@@ -382,20 +382,20 @@ function drawSatellites(data, x_scale) {
 }
 
 // Create a d3 force simulation
-var simulation = d3.forceSimulation();
-simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
-.force("y", d3.forceY(yScale(0))) // yScale goes from -3 to 3, so 0 sets the middle
-.force("collision", d3.forceCollide(d => rScale(d.b)));
+// var simulation = d3.forceSimulation();
+// simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
+// .force("y", d3.forceY(yScale(0))) // yScale goes from -3 to 3, so 0 sets the middle
+// .force("collision", d3.forceCollide(d => rScale(d.b)));
 
-simulation.nodes(nodes).on("tick", updateDisplay);
+// simulation.nodes(nodes).on("tick", updateDisplay);
 
-updateDisplay();
+// updateDisplay();
 
-function updateDisplay() {
-    circles
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; });
-}
+// function updateDisplay() {
+//     circles
+//     .attr("cx", function(d) { return d.x; })
+//     .attr("cy", function(d) { return d.y; });
+// }
 
 // Load data from csv
 // Call callbacks to generate images
