@@ -189,7 +189,7 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) { return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); })
         .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.9)
+        .attr("opacity", 0.7)
         .on("mouseover", function(d) {
             var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
             var yPosition = height + y(0);
@@ -209,7 +209,7 @@ function satelliteCallback(err, data) {
         })
         .on("mouseout", function() {
             d3.select("#bartooltip").classed("hidden", true);
-            d3.select(this).attr("opacity", 0.9);
+            d3.select(this).attr("opacity", 0.7);
         });
 
     drawSatellites(topTenData, x);
