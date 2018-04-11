@@ -1,16 +1,16 @@
 /* main setup */
 body {
+  margin: 0;
   background: #e2e1da;
   text-anchor: "middle";
-}
-
-#main {
-  overflow: auto;
+  font-family: "Rajdhani", sans-serif;
 }
 
 #intro {
   overflow: auto;
   background-color: #2a2b4d;
+  padding: 30px;
+  text-align: center;
 }
 
 #intro h1 {
@@ -46,7 +46,17 @@ body {
   color: #e2e1da;
 }
 
+/* legend bar style */
+
+#legendbar {
+  padding: 10px 16px;
+  background: #2a2b4d;
+  color: #e2e1da;
+}
+
 #slidercontainer {
+  background-color: #2a2b4d;
+  float: middle;
   width: 300px;
 }
 
@@ -68,13 +78,32 @@ body {
   opacity: 1;
 }
 
-#userlegend {
+#uses {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
   text-align: center;
-  transform: translateX(-200);
+  transform: translate(30);
+  padding-top: 10px;
+  font-weight: 500;
+  color: #e2e1da;
 }
+
+body.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 102px;
+}
+
+/* content style */
 
 #content {
   float: left; 
+  padding: 16px;
   width: 100%;
   position: relative;
 }
