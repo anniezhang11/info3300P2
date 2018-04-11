@@ -189,7 +189,7 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) { return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); })
         .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.9)
+        .attr("opacity", 0.7)
         .on("mouseover", function(d) {
             var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
             var yPosition = height + y(0);
@@ -205,9 +205,11 @@ function satelliteCallback(err, data) {
             d3.select("#gdp")
                 .text((d.gdp/1000000000).toFixed(2));
             d3.select("#bartooltip").classed("hidden", false);
+            d3.select(this).attr("opacity", 1);
         })
         .on("mouseout", function() {
             d3.select("#bartooltip").classed("hidden", true);
+            d3.select(this).attr("opacity", 0.7);
         });
 
     drawSatellites(topTenData, x);
@@ -507,6 +509,22 @@ function drawSatellites(data, x_scale) {
         });
     });
 }
+
+// Create a d3 force simulation
+// var simulation = d3.forceSimulation();
+// simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
+// .force("y", d3.forceY(yScale(0))) // yScale goes from -3 to 3, so 0 sets the middle
+// .force("collision", d3.forceCollide(d => rScale(d.b)));
+
+// simulation.nodes(nodes).on("tick", updateDisplay);
+
+// updateDisplay();
+
+// function updateDisplay() {
+//     circles
+//     .attr("cx", function(d) { return d.x; })
+//     .attr("cy", function(d) { return d.y; });
+// }
 
 // Load data from csv
 // Call callbacks to generate images
