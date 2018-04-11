@@ -15,6 +15,10 @@
   <div id="main">
     <div id="intro"> 
           <h1>The Race to Space</h1>
+          <h4>by Annie Zhang, Oren Michaely & Rachel Liu</h4>
+          <p>This visualization depicts satellites launched by the top ten countries of satellite ownership by count.
+            <br>The graph can be toggled by satellite use or year of launch.
+          </p>
         </div>
     <div id="content"> 
       <svg id="satellites"></svg>
@@ -27,8 +31,8 @@
     <p>GDP (billions): $<span id="gdp"></span></p>
   </div>
   <div id="sattooltip" class="hidden">
+      <p><span id="name"></span></p>
       <p>Country Of Operator: <span id="countrySat"></span></p>
-      <p>Name: <span id="name"></span></p>
       <p>Use: <span id="use"></span></p>
       <p>Altitide: <span id="altitude">Meters</span></p>
       <p>Launch Mass: <span id="mass"> Kg</span></p>

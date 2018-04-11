@@ -152,7 +152,7 @@ function satelliteCallback(err, data) {
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
-    var colors = ["#761f55", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1"];
+    var colors = ["#7f2962", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1"];
     for (var i=0; i < 10; i++) {
         thisCountryData = {
             name: topTen[i].key,
@@ -169,7 +169,7 @@ function satelliteCallback(err, data) {
 
     var svgBars = d3.select("#gdpBars");
     var padding = 0;
-        margin = {top: 0, right: 20, bottom: 20, left: 20},
+        margin = {top: 0, right: 80, bottom: 80, left: 80},
         width = document.getElementById("content").offsetWidth - margin.left - margin.right,
         height = 1000 - margin.top - margin.bottom;
     var x = d3.scaleLinear().range([0, width]);
@@ -219,9 +219,9 @@ function satelliteCallback(err, data) {
 function drawSatellites(data, x_scale) {
     console.log(data);
     // for each country
-    var margin = {top: 20, right: 20, bottom: 20, left: 20},
+    var margin = {top: 80, right: 80, bottom: 20, left: 80},
         width = document.getElementById("content").offsetWidth - margin.left - margin.right,
-        height = 1840 - margin.top - margin.bottom;
+        height = 1900 - margin.top - margin.bottom;
 
     var svgSat = d3.select("#satellites");
     var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("id", "satg");
@@ -255,19 +255,20 @@ function drawSatellites(data, x_scale) {
             offset = 40;
         }
         g.append("line")
-            .attr("x1", offset)
+            .attr("x1", 0)
             .attr("x2", width)
             .attr("y1", this_y_scale(breakdowns[i+1]))
             .attr("y2", this_y_scale(breakdowns[i+1]))
-            .attr("stroke", "#727276")
-            .attr("stroke-width", "2px");
+            .attr("stroke", "#85858d")
+            .attr("stroke-width", "1px");
         g.append("text")
-            .attr("x", 0)
+            .attr("x", -10)
             .attr("y", this_y_scale(breakdowns[i+1]))
-            .attr("text-anchor", "start")
+            .attr("text-anchor", "end")
             .attr("alignment-baseline", "middle")
-            .attr("fill", "#727276")
-            .attr("font-family", "sans-serif")
+            .attr("fill", "#85858d")
+            .attr("font-family", "Rajdhani")
+            .attr("font-size", "16px")
             .text(breakdowns[i+1].toString());
         
     }
