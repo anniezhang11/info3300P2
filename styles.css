@@ -3,25 +3,41 @@
   overflow: auto;
 }
 
-#left {
+#intro {
+  overflow: auto;
+  background-color: #2a2b4d;
+}
+
+#intro h1 {
+  margin: 0;
+  font-family: "Rubik Mono One", sans-serif;
+  font-size: 36px;
+  line-height: 50px;
+  text-align: center;
+  padding-top: 20px;
+  font-weight: 500;
+  color: #e2e1da;
+}
+
+#content {
   float: left; 
   width: 100%;
   position: relative;
 }
 
-svg {
+# svg {
   float:left;
 }
 
 #satellites {
-  background: linear-gradient(#1f223d, #494847);
+  background: linear-gradient(#2a2b4d, #18181b);
   display: block;
   width: 100%;
   height: 1840px;
 }
 
 #gdpBars {
-  background-color: #494847;
+  background-color: #18181b;
   display: block;
   width: 100%;
   height: 1000px;
@@ -48,7 +64,7 @@ svg {
 
 #bartooltip p {
   margin: 0;
-  font-family: Futura;
+  font-family: "Rajdhani", sans-serif;
   font-size: 16px;
   line-height: 20px;
 }
@@ -74,7 +90,7 @@ svg {
 
 #sattooltip p {
   margin: 0;
-  font-family: Futura;
+  font-family: "Rajdhani", sans-serif;
   font-size: 16px;
   line-height: 20px;
 }

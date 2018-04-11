@@ -333,7 +333,7 @@ function drawSatellites(data, x_scale) {
                 .on("mouseover", function() {
                         var xPosition = parseFloat(x3) + 30;
                         var yPosition = parseFloat(y3)  + 30;
-                        if(xPosition>)
+                        // if(xPosition>)
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
