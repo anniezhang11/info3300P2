@@ -189,7 +189,7 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) { return x(d.proportionSatellites);})
         .attr("height", function(d) { return height - y(d.gdp); })
         .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.9)
+        .attr("opacity", 0.7)
         .on("mouseover", function(d) {
             var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
             var yPosition = height + y(0);
@@ -205,9 +205,11 @@ function satelliteCallback(err, data) {
             d3.select("#gdp")
                 .text((d.gdp/1000000000).toFixed(2));
             d3.select("#bartooltip").classed("hidden", false);
+            d3.select(this).attr("opacity", 1);
         })
         .on("mouseout", function() {
             d3.select("#bartooltip").classed("hidden", true);
+            d3.select(this).attr("opacity", 0.7);
         });
 
     drawSatellites(topTenData, x);
@@ -221,7 +223,7 @@ function drawSatellites(data, x_scale) {
         height = 1840 - margin.top - margin.bottom;
 
     var svgSat = d3.select("#satellites");
-    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var g = svgSat.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("id", "satg");
     var x_start, x_end, x_coord, y_coord;
     var y_scale = d3.scaleLinear()
             .rangeRound([1800,0]);
@@ -288,6 +290,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
                         var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -333,7 +338,13 @@ function drawSatellites(data, x_scale) {
                 .on("mouseover", function() {
                         var xPosition = parseFloat(x3) + 30;
                         var yPosition = parseFloat(y3)  + 30;
+<<<<<<< HEAD
                         // if(xPosition>)
+=======
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
+>>>>>>> c058d7e2bda35971685deb4161b47b2cbaa99df2
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -373,6 +384,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
                         var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -413,6 +427,9 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
                         var yPosition = parseFloat(d3.select(this).attr("y"))  + 40;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 230;
+                        }
                         // console.log("xPos=" + xPosition);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
@@ -462,9 +479,12 @@ function drawSatellites(data, x_scale) {
                     .attr("d", hexFunction(hexLineData))
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
-                        .on("mouseover", function() {
+                    .on("mouseover", function() {
                         var xPosition = parseFloat(x5) + 30;
                         var yPosition = parseFloat(y5)  + 30;
+                        if(xPosition> parseFloat(d3.select("#satg").attr("width")/2)){
+                            xPosition = xPosition - 250;
+                        }
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -493,6 +513,22 @@ function drawSatellites(data, x_scale) {
         });
     });
 }
+
+// Create a d3 force simulation
+// var simulation = d3.forceSimulation();
+// simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
+// .force("y", d3.forceY(yScale(0))) // yScale goes from -3 to 3, so 0 sets the middle
+// .force("collision", d3.forceCollide(d => rScale(d.b)));
+
+// simulation.nodes(nodes).on("tick", updateDisplay);
+
+// updateDisplay();
+
+// function updateDisplay() {
+//     circles
+//     .attr("cx", function(d) { return d.x; })
+//     .attr("cy", function(d) { return d.y; });
+// }
 
 // Load data from csv
 // Call callbacks to generate images
