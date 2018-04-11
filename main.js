@@ -284,7 +284,34 @@ function drawSatellites(data, x_scale) {
                     .attr("r", (satellite.massDiam/2))
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
-                    .attr("opacity", 0.7);
+                    .attr("opacity", 0.7)
+                    .on("mouseover", function() {
+                        var xPosition = parseFloat(d3.select(this).attr("cx")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        var yPosition = parseFloat(d3.select(this).attr("cy")) + parseFloat(d3.select(this).attr("r")) + 30;
+                        console.log("xPos=" + xPosition);
+                        console.log(parseFloat(d3.select(this).attr("cx")));
+                        d3.select("#sattooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+                        d3.select("#countrySat")
+                            .text(satellite.countryOperator);
+                        d3.select("#name")
+                            .text(satellite.name);
+                        d3.select("#use")
+                            .text(satellite.user);
+                        d3.select("#altitude")
+                            .text(satellite.altitude);
+                        d3.select("#mass")
+                            .text(satellite.launchMass);
+                        d3.select("#launchDate")
+                            .text(satellite.launchDate);
+                        d3.select("#contractor")
+                            .text(satellite.countryContractor);
+                        d3.select("#sattooltip").classed("hidden", false);
+                    })
+                    .on("mouseout", function() {
+                        d3.select("#sattooltip").classed("hidden", true);
+                    });
             }else if(satellite.user == "Civil"){
 //                 <polygon fill="yellow" stroke="blue" stroke-width="2"
 // 3    points="05,30
