@@ -191,10 +191,11 @@ function satelliteCallback(err, data) {
         .attr("fill", function(d) { return d.color; })
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
-            var xPosition = (parseFloat(d3.select(this).attr("x")) + (x(d.proportionSatellites)) / 2) -100;
+            var xPosition = document.getElementById("content").offsetWidth - (parseFloat(d3.select(this).attr("x"))) - (((parseFloat(d3.select(this).attr("width")))) / 2);
             var yPosition = height + y(0);
+            console.log(xPosition);
             d3.select("#bartooltip")
-                .style("left", xPosition + "px")
+                .style("right", xPosition + "px")
                 .style("top", yPosition + "px")
             d3.select("#country")
                 .text(d.name);
