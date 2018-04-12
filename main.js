@@ -305,7 +305,7 @@ function drawSatellites(data, x_scale) {
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = (parseFloat(d3.select(this).attr("cx")))*(svgDim.width/1200);
+                        var xPosition = (parseFloat(d3.select(this).attr("cx"))+20)*(svgDim.width/1200);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                          // + parseFloat(d3.select(this).attr("r")) + 15;
                         var yPosition = (parseFloat(d3.select(this).attr("cy")) + 50)*(svgDim.height/2000);
@@ -356,8 +356,8 @@ function drawSatellites(data, x_scale) {
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
                 .on("mouseover", function() {
-                        var xPosition = parseFloat(x3) + 30;
-                        var yPosition = parseFloat(y3);
+                        var xPosition = (parseFloat(x3)+20)*(svgDim.width/1200);
+                        var yPosition = (parseFloat(y3) + 50)*(svgDim.height/2000);
                           // + document.getElementById("intro").offsetHeight + 350;
 
                         // if(xPosition> (document.getElementById("content").offsetWidth)/2){
@@ -401,8 +401,8 @@ function drawSatellites(data, x_scale) {
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
-                        var yPosition = parseFloat(d3.select(this).attr("y"));
+                        var xPosition = (parseFloat(d3.select(this).attr("x"))+20)*(svgDim.width/1200);
+                        var yPosition = (parseFloat(d3.select(this).attr("y")) + 50)*(svgDim.height/2000);
                          // + document.getElementById("intro").offsetHeight + 350;
                         // if(xPosition> (document.getElementById("content").offsetWidth)/2){
                         //     xPosition = xPosition - 230;
@@ -445,8 +445,8 @@ function drawSatellites(data, x_scale) {
                     .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')')
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = parseFloat(d3.select(this).attr("x")) + 40;
-                        var yPosition = parseFloat(d3.select(this).attr("y"));
+                        var xPosition = (parseFloat(d3.select(this).attr("x"))+20)*(svgDim.width/1200);
+                        var yPosition = (parseFloat(d3.select(this).attr("y")) + 50)*(svgDim.height/2000);
                          // + document.getElementById("intro").offsetHeight + 350;
                         // if(xPosition> (document.getElementById("content").offsetWidth)/2){
                         //     xPosition = xPosition - 230;
@@ -501,8 +501,8 @@ function drawSatellites(data, x_scale) {
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = parseFloat(x5) + 30;
-                        var yPosition = parseFloat(y5);
+                        var xPosition = (parseFloat(x5)+20)*(svgDim.width/1200);
+                        var yPosition = (parseFloat(y5) + 50)*(svgDim.height/2000);
                           // + document.getElementById("intro").offsetHeight + 350;
                         // if(xPosition> (document.getElementById("content").offsetWidth)/2){
                         //     xPosition = xPosition - 250;
