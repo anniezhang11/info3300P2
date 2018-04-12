@@ -531,13 +531,14 @@ var yearSlider = d3.select("#yearslider");
 
 // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
 
-var legendBar = document.getElementById("legendbar");
+var legendBar;
 var sticky;
 
-window.onload = function() { 
+document.addEventListener("DOMContentLoaded", function() { 
+    legendBar = document.getElementById("legendbar");
     sticky = legendBar.offsetTop;
     window.onscroll = function() {freezeHeader();};
-};
+});
 
 function freezeHeader() {
   if (window.pageYOffset >= sticky) {
