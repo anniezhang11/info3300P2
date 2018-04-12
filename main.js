@@ -305,10 +305,10 @@ function drawSatellites(data, x_scale) {
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
                     .on("mouseover", function() {
-                        var xPosition = (parseFloat(d3.select(this).attr("cx")))*(svgDim.width/width);
+                        var xPosition = (parseFloat(d3.select(this).attr("cx")))*(svgDim.width/1200);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
                          // + parseFloat(d3.select(this).attr("r")) + 15;
-                        var yPosition = (parseFloat(d3.select(this).attr("cy")))*(svgDim.height/height);
+                        var yPosition = (parseFloat(d3.select(this).attr("cy")) + 50)*(svgDim.height/2000);
                         // console.log(yPosition);
                         // if(xPosition > (document.getElementById("content").offsetWidth)/2){
                         //     xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
@@ -537,7 +537,6 @@ function drawSatellites(data, x_scale) {
 }
 
 var yearSlider = d3.select("#yearslider");
-<<<<<<< HEAD
 
 
 // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
@@ -559,8 +558,6 @@ function freezeHeader() {
   }
 }
 
-=======
->>>>>>> 4a8fdd3b7e8bb212e4b295fd03f93f9f29b99786
 // Create a d3 force simulation
 // var simulation = d3.forceSimulation();
 // simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
