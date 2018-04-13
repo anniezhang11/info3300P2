@@ -176,7 +176,7 @@ function satelliteCallback(err, data) {
         y = d3.scaleLinear().range([height, 0]);
     var g = svgBars.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+    var svgDim = svgBars.node().getBoundingClientRect();
     x.domain([0, 1]);
     y.domain([0, d3.max(topTenData, function(d) { return d.gdp; })]);
 
@@ -192,9 +192,7 @@ function satelliteCallback(err, data) {
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
             var xPosition = document.getElementById("content").offsetWidth - (parseFloat(d3.select(this).attr("x"))) - (((parseFloat(d3.select(this).attr("width")))) / 2) - 200;
-            var yPosition = document.getElementById("satdiv").offsetHeight + document.getElementById("intro").offsetHeight;
-            // var yPosition = parseFloat(d3.select(this).attr("y")) - 15;
-            // console.log(yPosition);
+            var yPosition = document.getElementById("satdiv").offsetHeight;
             d3.select("#bartooltip")
                 .style("right", xPosition + "px")
                 .style("top", yPosition + "px")
