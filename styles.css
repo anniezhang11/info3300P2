@@ -53,8 +53,8 @@ body {
   background: #2a2b4d;
   color: #e2e1da;
   font-family: "Rajdhani", sans-serif;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 16px;
+  line-height: 20px;
   text-align: center;
   transform: translate(30);
   padding-top: 10px;
@@ -68,14 +68,88 @@ input[type="checkbox"] {
 
 label {
   cursor: pointer;
+  padding-left: 10px;
+  color: #85858d;
 }
 
-input[type="checkbox"] + label span {
+input[type="checkbox"][id="commercialCheck"] + label span {
   display: inline-block;
   vertical-align: middle;
-  width: 30px;
-  height: 30px;
-  background: url(path/to/checkbox-radio-sprite.png) 0px center no-repeat;
+  width: 20px;
+  height: 20px;
+  background: url(checkboxes/circle_check.png) no-repeat;
+  background-position: left 0px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="commercialCheck"]:checked + label span {
+  background: url(checkboxes/circle_check.png) no-repeat;
+  background-position-x: -20px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="civilCheck"] + label span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: url(checkboxes/triangle_check.png) no-repeat;
+  background-position: left 0px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="civilCheck"]:checked + label span {
+  background: url(checkboxes/triangle_check.png) no-repeat;
+  background-position-x: -20px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="militaryCheck"] + label span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: url(checkboxes/square_check.png) no-repeat;
+  background-position: left 0px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="militaryCheck"]:checked + label span {
+  background: url(checkboxes/square_check.png) no-repeat;
+  background-position-x: -20px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="governmentCheck"] + label span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: url(checkboxes/diamond_check.png) no-repeat;
+  background-position: left 0px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="governmentCheck"]:checked + label span {
+  background: url(checkboxes/diamond_check.png) no-repeat;
+  background-position-x: -20px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="multipleCheck"] + label span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  background: url(checkboxes/hex_check.png) no-repeat;
+  background-position: left 0px;
+  background-size: 200%;
+}
+
+input[type="checkbox"][id="multipleCheck"]:checked + label span {
+  background: url(checkboxes/hex_check.png) no-repeat;
+  background-position-x: -20px;
+  background-size: 200%;
 }
 
 /* style the range slider, adapted from: http://www.cssportal.com/style-input-range/ */
@@ -84,6 +158,7 @@ input[type=range] {
   background: transparent;
   margin: 10px;
   width: 250px;
+  padding-left: 50px;
 }
 
 input[type=range]:focus {

@@ -224,8 +224,41 @@ function satelliteCallback(err, data) {
         .style("text-anchor", "start")
 		.text("test");
 */
+
+
     drawSatellites(topTenData, x);
+
+    commCheck = document.getElementById("commercialCheck");
+    // console.log(commCheck);
+    commCheck.onchange = function(){
+        changeFunc();
+    };
+    civilCheck = document.getElementById("civilCheck");
+    civilCheck.onchange = function(){
+        changeFunc();
+    };
+    militaryCheck = document.getElementById("militaryCheck");
+    militaryCheck.onchange = function(){
+        changeFunc();
+    };
+    governmentCheck = document.getElementById("governmentCheck");
+    governmentCheck.onchange = function(){
+        changeFunc();
+    };
+    multipleCheck = document.getElementById("multipleCheck");
+    multipleCheck.onchange = function(){
+        changeFunc();
+
+    };
+    function  changeFunc(){
+        d3.select("#satellites").selectAll("circle").remove();
+        d3.select("#satellites").selectAll("path").remove();
+        d3.select("#satellites").selectAll("rect").remove();
+        drawSatellites(topTenData, x);
+    };
 }
+
+
 
 function drawSatellites(data, x_scale) {
     // console.log(data);
@@ -283,18 +316,18 @@ function drawSatellites(data, x_scale) {
             .text(breakdowns[i+1].toString());
         
     }
-
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
         x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
         var svgDim = svgSat.node().getBoundingClientRect();
-        console.log(svgDim.width);
+        // console.log(svgDim.width);
+
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start) + x_start;
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
-            if(satellite.user == "Commercial"){
+            if((satellite.user == "Commercial") && (document.getElementById("commercialCheck").checked == true)){
                 g.append("circle")
                     .attr("cx", x_coord)
                     .attr("cy", y_coord)
@@ -337,7 +370,7 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", .7);
                         d3.select("#sattooltip").classed("hidden", true);
                     });
-            }else if(satellite.user == "Civil"){
+            }else if(satellite.user == "Civil" && document.getElementById("civilCheck").checked == true){
                 var x1 = x_coord-(satellite.massDiam/2);
                 var h = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
                 var y1 = y_coord+(h/2);
@@ -389,7 +422,7 @@ function drawSatellites(data, x_scale) {
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
-            else if (satellite.user == "Military"){
+            else if (satellite.user == "Military" && document.getElementById("militaryCheck").checked == true){
                 g.append("rect")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
@@ -432,7 +465,7 @@ function drawSatellites(data, x_scale) {
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
-            else if (satellite.user == "Government"){
+            else if (satellite.user == "Government" && document.getElementById("governmentCheck").checked == true){
                 g.append("rect")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
@@ -476,7 +509,7 @@ function drawSatellites(data, x_scale) {
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
-            else {
+            else if(document.getElementById("multipleCheck").checked == true){
                 var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
                 var y1 = y_coord + hHex;
                 var x1 = x_coord - (hHex/2);

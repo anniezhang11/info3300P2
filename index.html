@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css" />
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.1.0/d3-annotation.js"></script>
-  <script src="main.js"></script>
+  <script src="main.js" ></script>
 </head>
 
 <body>
@@ -22,18 +22,17 @@
   </div>
 
   <div id="legendbar">
-      <p>testing</p>
-      <input type="checkbox" id="commercialuse" checked/>
-      <label for="commercialuse"> <span></span> Commercial</label>
-      <input type="checkbox" id="civiluse" checked/>
-      <label for="civiluse"> <span></span> Civil</label>
-      <input type="checkbox" id="militaryuse" checked/>
-      <label for="militaryuse"> <span></span> Military</label>
-      <input type="checkbox" id="governmentuse" checked/>
-      <label for="governmentuse"> <span></span> Government</label>
-      <input type="checkbox" id="multipleuse" checked/>
-      <label for="multipleuse"> <span></span> Multiple</label>
-      <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
+    <input type="checkbox" id="commercialCheck" checked onclick="checkFunc()"/>
+    <label for="commercialCheck"> <span></span>COMMERCIAL  </label>
+    <input type="checkbox" id="civilCheck" checked onclick="checkFunc()"/>
+    <label for="civilCheck"> <span></span>CIVIL  </label>
+    <input type="checkbox" id="militaryCheck" checked onclick="checkFunc()"/>
+    <label for="militaryCheck"> <span></span>MILITARY  </label>
+    <input type="checkbox" id="governmentCheck" checked onclick="checkFunc()"/>
+    <label for="governmentCheck"> <span></span>GOVERNMENT  </label>
+    <input type="checkbox" id="multipleCheck" checked onclick="checkFunc()"/>
+    <label for="multipleCheck"> <span></span>MULTI-PURPOSE  </label>
+    <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
   </div>
 
   <div id="content"> 
