@@ -231,39 +231,26 @@ function satelliteCallback(err, data) {
     commCheck = document.getElementById("commercialCheck");
     // console.log(commCheck);
     commCheck.onchange = function(){
-        // console.log("change");
-        d3.select("#satellites").selectAll("circle").remove();
-        d3.select("#satellites").selectAll("path").remove();
-        d3.select("#satellites").selectAll("rect").remove();
-        drawSatellites(topTenData, x);
+        changeFunc();
     };
     civilCheck = document.getElementById("civilCheck");
     civilCheck.onchange = function(){
-        // console.log("change");
-        d3.select("#satellites").selectAll("circle").remove();
-        d3.select("#satellites").selectAll("path").remove();
-        d3.select("#satellites").selectAll("rect").remove();
-        drawSatellites(topTenData, x);
+        changeFunc();
     };
     militaryCheck = document.getElementById("militaryCheck");
     militaryCheck.onchange = function(){
-        // console.log("change");
-        d3.select("#satellites").selectAll("circle").remove();
-        d3.select("#satellites").selectAll("path").remove();
-        d3.select("#satellites").selectAll("rect").remove();
-        drawSatellites(topTenData, x);
+        changeFunc();
     };
     governmentCheck = document.getElementById("governmentCheck");
     governmentCheck.onchange = function(){
-        // console.log("change");
-        d3.select("#satellites").selectAll("circle").remove();
-        d3.select("#satellites").selectAll("path").remove();
-        d3.select("#satellites").selectAll("rect").remove();
-        drawSatellites(topTenData, x);
+        changeFunc();
     };
     multipleCheck = document.getElementById("multipleCheck");
     multipleCheck.onchange = function(){
-        // console.log("change");
+        changeFunc();
+
+    };
+    function  changeFunc(){
         d3.select("#satellites").selectAll("circle").remove();
         d3.select("#satellites").selectAll("path").remove();
         d3.select("#satellites").selectAll("rect").remove();
