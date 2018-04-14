@@ -543,7 +543,7 @@ var legendBar;
 var sticky;
 
 document.addEventListener("DOMContentLoaded", function() { 
-    legendBar = document.getElementById("legendbar");
+    legendBar = document.getElementById("#legendbar");
     sticky = legendBar.offsetTop;
     window.onscroll = function() {freezeHeader();};
 });

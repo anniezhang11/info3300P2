@@ -11,8 +11,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.1.0/d3-annotation.js"></script>
   <script src="main.js"></script>
 </head>
+
 <body>
-  <div class="header" id="intro">
+  <div id="intro">
       <h1>The Race to Space</h1>
       <h4>by Annie Zhang (zz229), Oren Michaely (om72) & Rachel Liu (rl544)</h4>
       <p>This visualization depicts satellites launched by the top ten countries of satellite ownership by count.
@@ -20,22 +21,19 @@
       </p>
   </div>
 
-  <div class="legend" id="legendbar">
-    <div class="legendcontainer" id="usecats">
+  <div id="legendbar">
+      <p>testing</p>
       <input type="checkbox" id="commercialuse" checked/>
-      <label for="option"> <span></span> Commercial</label>
+      <label for="commercialuse"> <span></span> Commercial</label>
       <input type="checkbox" id="civiluse" checked/>
-      <label for="option"> <span></span> Civil</label>
+      <label for="civiluse"> <span></span> Civil</label>
       <input type="checkbox" id="militaryuse" checked/>
-      <label for="option"> <span></span> Military</label>
+      <label for="militaryuse"> <span></span> Military</label>
       <input type="checkbox" id="governmentuse" checked/>
-      <label for="option"> <span></span> Government</label>
+      <label for="governmentuse"> <span></span> Government</label>
       <input type="checkbox" id="multipleuse" checked/>
-      <label for="option"> <span></span> Multiple</label>
-    </div>
-    <div id="slidercontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
-    </div>
+      <label for="multipleuse"> <span></span> Multiple</label>
+      <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
   </div>
 
   <div id="content"> 
@@ -46,12 +44,12 @@
       <svg id="gdpBars" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
 
-  <div id="bartooltip" class="hidden">
+    <div id="bartooltip" class="hidden">
         <p><strong><span id="country">100</span></strong></p>
         <p>Number of Satellites: <span id="numsats"></span></p>
         <p>GDP (bil): $<span id="gdp"></span></p>
-  </div>
-  <div id="sattooltip" class="hidden">
+    </div>
+    <div id="sattooltip" class="hidden">
         <p><span id="name"></span></p>
         <p>Country Of Operator: <span id="countrySat"></span></p>
         <p>Use: <span id="use"></span></p>
@@ -59,7 +57,7 @@
         <p>Launch Mass: <span id="mass"> Kg</span></p>
         <p>Date Of Launch: <span id="launchDate"></span></p>
         <p>Country Of Contractor: <span id="contractor"></span></p>
-  </div>
+    </div>
   </div>
 
   

@@ -3,6 +3,7 @@ body {
   margin: 0;
   text-anchor: "middle";
   font-family: "Rajdhani", sans-serif;
+  background-color: #2a2b4d;
 }
 
 #intro {
@@ -51,33 +52,6 @@ body {
   padding: 10px 16px;
   background: #2a2b4d;
   color: #e2e1da;
-}
-
-#slidercontainer {
-  background-color: #2a2b4d;
-  float: middle;
-  width: 300px;
-}
-
-#yearslider {
-  -webkit-appearance: none;
-  width: 300px;
-  height: 5px;
-  background: #85858d;
-  outline: none; 
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-  position: absolute;
-  right: 150px;
-  top: 250px;
-}
-
-#slider:hover {
-  opacity: 1;
-}
-
-#uses {
   font-family: "Rajdhani", sans-serif;
   font-size: 14px;
   line-height: 18px;
@@ -85,15 +59,66 @@ body {
   transform: translate(30);
   padding-top: 10px;
   font-weight: 500;
-  color: #e2e1da;
 }
+
+/* style the checkboxes */
+input[type="checkbox"] {
+  display: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+input[type="checkbox"] + label span {
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  background: url(path/to/checkbox-radio-sprite.png) 0px center no-repeat;
+}
+
+/* style the range slider, adapted from: http://www.cssportal.com/style-input-range/ */
+input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+  margin: 10px;
+  width: 250px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #2a2b4d;
+  height: 14px;
+  width: 10px;
+  border-radius: 3px;
+  background: #e2e1da;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #0d0d0d6c, 0px 0px 1px #0d0d0d6c;
+  margin-top: -3px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  box-shadow: 0px 0px 0px #000000;
+  background: #18181b;
+  border-radius: 25px;
+  border: 0px solid #000101;
+}
+
 
 body.sticky {
   position: fixed;
   top: 0;
   width: 100%;
-}
-
+  }
+  
 .sticky + .content {
   padding-top: 102px;
 }
@@ -102,7 +127,6 @@ body.sticky {
 
 #content {
   float: left; 
-  padding: 16px;
   width: 100%;
   position: relative;
 }
