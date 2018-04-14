@@ -6,6 +6,7 @@ body {
   background-color: #2a2b4d;
 }
 
+/* header style */
 #intro {
   overflow: auto;
   background-color: #2a2b4d;
@@ -61,7 +62,7 @@ body {
   font-weight: 500;
 }
 
-/* style the checkboxes */
+/* style the checkboxes, adapted from: https://theblog.adobe.com/css-vs-svg-styling-checkboxes-and-radio-buttons/ */
 input[type="checkbox"] {
   display: none;
 }
