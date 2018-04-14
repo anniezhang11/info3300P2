@@ -14,7 +14,7 @@
 
 <body>
   <div id="intro">
-      <h1>The Race to Space</h1>
+      <h1><img src="images/satelliteiconflip.png" alt="Satellite Icon">The Race to Space<img src="images/satelliteicon.png" alt="Satellite Icon"></h1>
       <h4>by Annie Zhang (zz229), Oren Michaely (om72) & Rachel Liu (rl544)</h4>
       <p>This visualization depicts satellites launched by the top ten countries of satellite ownership by count.
         <br>The graph can be toggled by satellite use or year of launch.
@@ -22,6 +22,7 @@
   </div>
 
   <div id="legendbar">
+    <span>SELECT USE      &#8674; </span>
     <input type="checkbox" id="commercialCheck" checked onclick="checkFunc()"/>
     <label for="commercialCheck"> <span></span>COMMERCIAL  </label>
     <input type="checkbox" id="civilCheck" checked onclick="checkFunc()"/>
@@ -33,6 +34,7 @@
     <input type="checkbox" id="multipleCheck" checked onclick="checkFunc()"/>
     <label for="multipleCheck"> <span></span>MULTI-PURPOSE  </label>
     <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
+    <span> &#8672;     SELECT YEAR</span>
   </div>
 
   <div id="content"> 
@@ -40,7 +42,7 @@
       <svg id="satellites" viewBox="0 0 1200 2000" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
     <div id="gdpdiv">
-      <svg id="gdpBars" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet"></svg>
+      <svg id="gdpBars" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
 
     <div id="bartooltip" class="hidden">
@@ -59,6 +61,12 @@
     </div>
   </div>
 
-  
+  <div id="notes">
+    <p>SOURCES:
+      <br>Satellite data was obtained from the <a href="https://www.ucsusa.org/nuclear-weapons/space-weapons/satellite-database#.WtJ5HtXwYy4">UCS Satellite Database (2018)</a>.
+      <br>GDP data was obtained from the <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD">World Bank (2018)</a>.
+      <br>Satellite icon was taken from the <a href="https://thenounproject.com/andrei.manolache7/">Noun Project</a>.
+    </p>
+  </div>
 </body>
 </html>

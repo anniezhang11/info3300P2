@@ -3,7 +3,7 @@ body {
   margin: 0;
   text-anchor: "middle";
   font-family: "Rajdhani", sans-serif;
-  background-color: #2a2b4d;
+  background: linear-gradient(#2a2b4d, #18181b);
 }
 
 /* header style */
@@ -12,6 +12,7 @@ body {
   background-color: #2a2b4d;
   padding: 30px;
   text-align: center;
+  vertical-align: top;
 }
 
 #intro h1 {
@@ -25,11 +26,19 @@ body {
   color: #e2e1da;
 }
 
+img {
+  display: inline;
+  padding-left: 25px;
+  padding-right: 25px;
+  vertical-align: text-top;
+  transform: scale(.8);
+}
+
 #intro h4 {
   margin: 0;
   font-family: "Rajdhani", sans-serif;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 18px;
   text-align: center;
   padding-top: 10px;
   font-weight: 500;
@@ -44,7 +53,7 @@ body {
   text-align: center;
   padding-top: 10px;
   font-weight: 500;
-  color: #e2e1da;
+  color: #85858d;
 }
 
 /* legend bar style */
@@ -56,12 +65,18 @@ body {
   font-family: "Rajdhani", sans-serif;
   font-size: 16px;
   line-height: 20px;
+  font-weight: 700;
   text-align: center;
   transform: translate(30);
   padding-top: 10px;
-  font-weight: 500;
 }
 
+#legendbar span {
+  color: #85858d;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 900;
+}
 /* style the checkboxes, adapted from: https://theblog.adobe.com/css-vs-svg-styling-checkboxes-and-radio-buttons/ */
 input[type="checkbox"] {
   display: none;
@@ -70,7 +85,7 @@ input[type="checkbox"] {
 label {
   cursor: pointer;
   padding-left: 10px;
-  color: #85858d;
+  color: #e2e1da;
 }
 
 input[type="checkbox"][id="commercialCheck"] + label span {
@@ -189,7 +204,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 
-body.sticky {
+.sticky {
   position: fixed;
   top: 0;
   width: 100%;
@@ -279,4 +294,20 @@ body.sticky {
   font-size: 16px;
   font-weight: 800;
   line-height: 20px;
+}
+
+/* notes style */
+#notes {
+  margin: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  text-align: left;
+  padding-left: 10px;
+  background: #18181b;
+  color: #85858d;
+}
+
+a {
+  color: #e2e1da;
+  text-decoration: none;
 }
