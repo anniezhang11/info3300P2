@@ -224,7 +224,17 @@ function satelliteCallback(err, data) {
         .style("text-anchor", "start")
 		.text("test");
 */
-
+    window.onscroll = function() {stickFunc()};
+    var header = document.getElementById("legendbar");
+    var sticky = header.offsetTop;
+    function stickFunc(){
+        if (window.pageYOffset >= 210){  
+            header.classList.add("sticky");
+        }
+        else{
+            header.classList.remove("sticky");
+        }
+    };
 
     drawSatellites(topTenData, x);
 
@@ -256,6 +266,9 @@ function satelliteCallback(err, data) {
         d3.select("#satellites").selectAll("rect").remove();
         drawSatellites(topTenData, x);
     };
+
+
+
 }
 
 
@@ -596,24 +609,25 @@ var yearSlider = d3.select("#yearslider");
 
 // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
 
-var legendBar;
-var sticky;
+// var legendBar;
+// var sticky;
 
-document.addEventListener("DOMContentLoaded", function() { 
-    legendBar = document.getElementById("#legendbar");
-    sticky = legendBar.offsetTop;
-    window.onscroll = function() {freezeHeader()};
-});
+// document.addEventListener("DOMContentLoaded", function() { 
+//     legendBar = document.getElementById("legendbar");
+//     sticky = legendBar.offsetTop;
+//     window.onscroll = function() {freezeHeader()};
+// });
 
-function freezeHeader() {
-  if (window.pageYOffset >= sticky) {
-    legendBar.classList.add("sticky");
-  } else {
-    legendBar.classList.remove("sticky");
-  }
-}
+// function freezeHeader() {
+//   if (window.pageYOffset >= sticky) {
+//     legendBar.classList.add("sticky");
+//   } else {
+//     legendBar.classList.remove("sticky");
+//   }
+// }
 
 // Load data from csv
 // Call callbacks to generate images
+
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
