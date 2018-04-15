@@ -295,6 +295,13 @@ input[type=range]::-webkit-slider-runnable-track {
   font-weight: 800;
   line-height: 20px;
 }
+/* 
+.flag-icon {
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+} */
 
 /* notes style */
 #notes {

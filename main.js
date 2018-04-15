@@ -555,6 +555,13 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.launchDate);
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
+                        d3.select("#flag")
+                            // .attr("src",  function(d) { return d.img;})
+                            .attr("src",  "flags/ad.svg")
+                            .attr("x", xPosition + 250)
+                            .attr("y", yPosition + 10)
+                            .attr("height", 30)
+                            .attr("width", 40);
                         d3.select(this).attr("opacity", 1);
                         d3.select("#sattooltip").classed("hidden", false);
                         })
@@ -567,6 +574,23 @@ function drawSatellites(data, x_scale) {
     });
 }
 
+// Create a d3 force simulation
+var simulation = d3.forceSimulation();
+simulation.force("x", d3.forceX(d => x_scale(d.x)).strength(0.5)) // default strength is 0.1
+.force("y", d3.forceY(d => y_scale(d.y))) // yScale goes from -3 to 3, so 0 sets the middle
+.force("collision", d3.forceCollide(d => rScale(d.b)));
+
+// simulation.nodes(nodes).on("tick", updateDisplay);
+
+// updateDisplay();
+
+// function updateDisplay() {
+//     circles
+//     .attr("cx", function(d) { return d.x; })
+//     .attr("cy", function(d) { return d.y; });
+// }
+
+// implement range slider
 var yearSlider = d3.select("#yearslider");
 
 
@@ -588,22 +612,6 @@ function freezeHeader() {
     legendBar.classList.remove("sticky");
   }
 }
-
-// Create a d3 force simulation
-// var simulation = d3.forceSimulation();
-// simulation.force("x", d3.forceX(d => xScale(d.x)).strength(0.5)) // default strength is 0.1
-// .force("y", d3.forceY(yScale(0))) // yScale goes from -3 to 3, so 0 sets the middle
-// .force("collision", d3.forceCollide(d => rScale(d.b)));
-
-// simulation.nodes(nodes).on("tick", updateDisplay);
-
-// updateDisplay();
-
-// function updateDisplay() {
-//     circles
-//     .attr("cx", function(d) { return d.x; })
-//     .attr("cy", function(d) { return d.y; });
-// }
 
 // Load data from csv
 // Call callbacks to generate images
