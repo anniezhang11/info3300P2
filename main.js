@@ -134,7 +134,7 @@ d3.json("countrycodes.json", function (data) {
 })
 
 function getCountryCode2(countryCode3) {
-     return codes[0].countryCode3;
+     return codes[0].countryCode3.toLowerCase();
 };
 
 
