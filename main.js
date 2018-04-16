@@ -125,6 +125,19 @@ function customCompare(a,b) {
     return 0;
 }
 
+//parse country codes for flags in tooltips
+var codes;
+d3.json("countrycodes.json", function (data) {
+    codes = data;
+    console.log(codes);
+    console.log(getCountryCode2("USA"));
+})
+
+function getCountryCode2(countryCode3) {
+     return codes[0].countryCode3.toLowerCase();
+};
+
+
 function satelliteCallback(err, data) {
     satelliteData = data;
     // console.log(gdpData);
@@ -212,23 +225,16 @@ function satelliteCallback(err, data) {
             d3.select(this).attr("opacity", 0.7);
         });
 
-/*    g.selectAll(".bar")
-        .data(topTenData)
-        .enter().append("text")
-        .attr("x", function(d) { return x(d.accumulateSatellites); } + 5)
-        .style("font-family", "Rajdhani")
-		.style("font-size", "11px")
-		.style("fill", "#8C8C8B")
-		.style("alignment-baseline", "baseline")
-        .attr("transform", "rotate(90)")
-        .style("text-anchor", "start")
-		.text("test");
-*/
+
+
+    // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
+
     window.onscroll = function() {stickFunc()};
     var header = document.getElementById("legendbar");
     var sticky = header.offsetTop;
     function stickFunc(){
-        if (window.pageYOffset >= 205){  
+
+        if (window.pageYOffset >= 204){  
             header.classList.add("sticky");
         }
         else{
@@ -267,10 +273,7 @@ function satelliteCallback(err, data) {
         drawSatellites(topTenData, x);
     };
 
-
-
 }
-
 
 
 function drawSatellites(data, x_scale) {
@@ -605,26 +608,6 @@ simulation.force("x", d3.forceX(d => x_scale(d.x)).strength(0.5)) // default str
 
 // implement range slider
 var yearSlider = d3.select("#yearslider");
-
-
-// implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
-
-// var legendBar;
-// var sticky;
-
-// document.addEventListener("DOMContentLoaded", function() { 
-//     legendBar = document.getElementById("legendbar");
-//     sticky = legendBar.offsetTop;
-//     window.onscroll = function() {freezeHeader()};
-// });
-
-// function freezeHeader() {
-//   if (window.pageYOffset >= sticky) {
-//     legendBar.classList.add("sticky");
-//   } else {
-//     legendBar.classList.remove("sticky");
-//   }
-// }
 
 // Load data from csv
 // Call callbacks to generate images

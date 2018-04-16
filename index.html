@@ -9,11 +9,11 @@
   <link rel="stylesheet" type="text/css" href="styles.css" />
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.1.0/d3-annotation.js"></script>
+  <script type="text/javascript" src="countrycodes.json"></script>
   <script src="main.js" ></script>
 </head>
 
 <body>
-<!-- <div id="bodyDiv"> -->
     <div id="intro">
         <h1><img src="images/satelliteiconflip.png" alt="Satellite Icon">The Race to Space<img src="images/satelliteicon.png" alt="Satellite Icon"></h1>
         <h4>by Annie Zhang (zz229), Oren Michaely (om72) & Rachel Liu (rl544)</h4>
@@ -21,22 +21,6 @@
           <br>The graph can be toggled by satellite use or year of launch.
         </p>
     </div>
-
-<!--     <div id="legendbar">
-        <span>SELECT USE      &#8674; </span>
-        <input type="checkbox" id="commercialCheck" checked/>
-        <label for="commercialCheck"> <span></span>COMMERCIAL  </label>
-        <input type="checkbox" id="civilCheck" checked/>
-        <label for="civilCheck"> <span></span>CIVIL  </label>
-        <input type="checkbox" id="militaryCheck" checked/>
-        <label for="militaryCheck"> <span></span>MILITARY  </label>
-        <input type="checkbox" id="governmentCheck" checked/>
-        <label for="governmentCheck"> <span></span>GOVERNMENT  </label>
-        <input type="checkbox" id="multipleCheck" checked/>
-        <label for="multipleCheck"> <span></span>MULTI-PURPOSE  </label>
-        <input type="range" min="1" max="100" value="50" class="slider" id="yearslider">
-        <span> &#8672;     SELECT YEAR</span>
-    </div> -->
 
     <div id="content"> 
       <div id="legendbar">
@@ -84,6 +68,5 @@
         <br>Satellite icon was taken from the <a href="https://thenounproject.com/andrei.manolache7/">Noun Project</a>.
       </p>
     </div>
-<!--   </div> -->
 </body>
 </html>
