@@ -384,10 +384,12 @@ function drawSatellites(data, x_scale) {
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
+                        d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
                     })
                     .on("mouseout", function() {
                         d3.select(this).attr("opacity", .7);
+                        d3.select(this).style("stroke", "none");
                         d3.select("#sattooltip").classed("hidden", true);
                     });
             }else if(satellite.user == "Civil" && document.getElementById("civilCheck").checked == true){
@@ -435,10 +437,12 @@ function drawSatellites(data, x_scale) {
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
+                        d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
                         })
                         .on("mouseout", function() {
                             d3.select(this).attr("opacity", .7);
+                            d3.select(this).style("stroke", "none");
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
@@ -478,10 +482,12 @@ function drawSatellites(data, x_scale) {
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
+                        d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
                         })
                         .on("mouseout", function() {
                             d3.select(this).attr("opacity", .7);
+                            d3.select(this).style("stroke", "none");
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
@@ -522,10 +528,12 @@ function drawSatellites(data, x_scale) {
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
+                        d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
                         })
                         .on("mouseout", function() {
                             d3.select(this).attr("opacity", .7);
+                            d3.select(this).style("stroke", "none");
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
@@ -583,10 +591,12 @@ function drawSatellites(data, x_scale) {
                             .attr("height", 30)
                             .attr("width", 40);
                         d3.select(this).attr("opacity", 1);
+                        d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
                         })
                         .on("mouseout", function() {
                             d3.select(this).attr("opacity", .7);
+                            d3.select(this).style("stroke", "none");
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
