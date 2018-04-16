@@ -318,3 +318,7 @@ a {
   color: #e2e1da;
   text-decoration: none;
 }
+
+.node.active {
+  fill: white;
+}

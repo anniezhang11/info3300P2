@@ -30,6 +30,7 @@ function parseSatelliteRow(row) {
     var country;
     var massDiam;
     var altitudeCategory;
+    var series;
     if (row["Country of Operator/Owner"] == "USA") {
         country = "United States";
     } else if (row["Country of Operator/Owner"] == "Russia") {
@@ -101,6 +102,7 @@ function parseSatelliteRow(row) {
 
     return {
         name: row["Current Official Name of Satellite"],
+        series: row["Series"],
         countryOperator: country, //gdp
         countryContractor: row["Country of Contractor"],
         user: row["Users"],
@@ -137,6 +139,10 @@ function getCountryCode2(countryCode3) {
      return codes[0].countryCode3.toLowerCase();
 };
 
+function highlight(series) {
+    if (series == null) d3.selectAll(".node").classed("active", false);
+    else d3.selectAll(".node." + series).classed("active", true);
+}
 
 function satelliteCallback(err, data) {
     satelliteData = data;
@@ -151,34 +157,83 @@ function satelliteCallback(err, data) {
     var idx = 0;
     var count = 0;
     var topTen = [];
-    var totalSatellites = 0;
     while (count < 10) {
         if (byCountry[idx].key !== "Multinational" && byCountry[idx].key !== "ESA") {
             topTen.push(byCountry[idx]);
             count++;
-            totalSatellites += byCountry[idx].values.length;
         }
         idx++;
     }
-    // console.log(topTen);
+
+    // group the remainder into a single category
+    var remainder = byCountry.splice(12);
+
+    function findWithAttr(array, attr, value) {
+        for(var i = 0; i < array.length; i += 1) {
+            if(array[i][attr] === value) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    var mult_idx = findWithAttr(byCountry, "key", "Multinational");
+    remainder.push(byCountry[mult_idx]);
+    var esa_idx = findWithAttr(byCountry, "key", "ESA");
+    remainder.push(byCountry[esa_idx]);
+    console.log(remainder);
+
+    var flatRemainder = [];
+    function flatten(array) {
+        for (var i=0; i < array.length; i++) {
+            var current = array[i].values;
+            for (var j=0; j < current.length; j++) {
+                flatRemainder.push(current[j])
+            }
+        }
+        return flatRemainder;
+    }
+    flatten(remainder);
+    topTen.push({key: "Other", values: flatRemainder});
+
+    // calculate total satellites
+    var totalSatellites = 0;
+    for (var i=0; i < 11; i++) {
+        totalSatellites += topTen[i].values.length;
+    };
+    console.log(totalSatellites);
 
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
-    var colors = ["#7f2962", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1"];
-    for (var i=0; i < 10; i++) {
-        thisCountryData = {
-            name: topTen[i].key,
-            numberSatellites: topTen[i].values.length,
-            proportionSatellites: (topTen[i].values.length/totalSatellites),
-            accumulateSatellites: acc,
-            gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]),
-            satellites: topTen[i].values, 
-            color: colors[i]
-        };
+    var colors = ["#7f2962", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1", "#c1c1c1"];
+    for (var i=0; i < 11; i++) {
+        if (topTen[i].key !== "Other") {
+            thisCountryData = {
+                name: topTen[i].key,
+                numberSatellites: topTen[i].values.length,
+                proportionSatellites: (topTen[i].values.length/totalSatellites),
+                accumulateSatellites: acc,
+                gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]),
+                satellites: topTen[i].values, 
+                color: colors[i]
+            };
+        } else {
+            thisCountryData = {
+                name: topTen[i].key,
+                numberSatellites: topTen[i].values.length,
+                proportionSatellites: (topTen[i].values.length/totalSatellites),
+                accumulateSatellites: acc,
+                gdp: 0,
+                satellites: topTen[i].values, 
+                color: colors[i]
+            };
+        }
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
+    console.log(topTenData);
+    console.log(acc);
 
     var svgBars = d3.select("#gdpBars");
     var padding = 0,
@@ -200,7 +255,7 @@ function satelliteCallback(err, data) {
         .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
         .attr("width", function(d) { return x(d.proportionSatellites);})
-        .attr("height", function(d) { return height - y(d.gdp); })
+        .attr("height", function(d) { return height - y(d.gdp) + 50; })
         .attr("fill", function(d) { return d.color; })
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
@@ -295,7 +350,7 @@ function drawSatellites(data, x_scale) {
     }),0]);
 
     // y scales for each altitude section
-    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 200, 200, 400, 150, 200];
+    var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 200, 200, 200, 200, 250];
     var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 10000, 20000, 30000, 40000, 50000, 175000];
     var var_name_str, var_val_str, rangeMax, rangeMin;
     for (var i = 0; i < 15; i++) {
@@ -355,6 +410,7 @@ function drawSatellites(data, x_scale) {
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
+                    // .attr("class", function(d) { return "node " + d.series})
                     .on("mouseover", function() {
                         var xPosition = (parseFloat(d3.select(this).attr("cx"))+20)*(svgDim.width/1200);
                         // console.log(parseFloat(d3.select(this).attr("cx")));
@@ -386,11 +442,13 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
+                        // highlight(d.series);
                     })
                     .on("mouseout", function() {
                         d3.select(this).attr("opacity", .7);
                         d3.select(this).style("stroke", "none");
                         d3.select("#sattooltip").classed("hidden", true);
+                        highlight(null);
                     });
             }else if(satellite.user == "Civil" && document.getElementById("civilCheck").checked == true){
                 var x1 = x_coord-(satellite.massDiam/2);
