@@ -650,7 +650,7 @@ function drawSatellites(data, x_scale) {
                             d3.select("#sattooltip").classed("hidden", true);
                         });
             }
-            else if(document.getElementById("multipleCheck").checked == true){
+            else if((satellite.user.includes("/")) && (document.getElementById("multipleCheck").checked == true)){
                 var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
                 var y1 = y_coord + hHex;
                 var x1 = x_coord - (hHex/2);
