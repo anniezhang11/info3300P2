@@ -228,7 +228,7 @@ function satelliteCallback(err, data) {
     var header = document.getElementById("legendbar");
     var sticky = header.offsetTop;
     function stickFunc(){
-        if (window.pageYOffset >= 210){  
+        if (window.pageYOffset >= 205){  
             header.classList.add("sticky");
         }
         else{
