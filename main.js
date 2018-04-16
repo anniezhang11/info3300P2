@@ -255,7 +255,7 @@ function satelliteCallback(err, data) {
         .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
         .attr("width", function(d) { return x(d.proportionSatellites);})
-        .attr("height", function(d) { return height - y(d.gdp) + 50; })
+        .attr("height", function(d) { return height - y(d.gdp); })
         .attr("fill", function(d) { return d.color; })
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
@@ -280,22 +280,64 @@ function satelliteCallback(err, data) {
             d3.select(this).attr("opacity", 0.7);
         });
 
+    // create footer
+    var footer = d3.select("#svgFooter");
+    var padding = 0,
+        margin = {top: 0, right: 20, bottom: 0, left: 100},
+        width = 1000,
+        height = 50;
+    var footerBars = footer.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    footerBars.selectAll(".bar")
+        .data(topTenData)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.accumulateSatellites); })
+        .attr("y", function(d) { return 0; })
+        .attr("width", function(d) { return x(d.proportionSatellites);})
+        .attr("height", 50)
+        .attr("fill", function(d) { return d.color; })
+        .attr("opacity", 0.7);
+    // footerBars.selectAll(".bar")
+    //     .enter().append("text")
 
-
+    
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
 
-    window.onscroll = function() {stickFunc()};
+    window.onscroll = function() {stickHeadFunc()};
     var header = document.getElementById("legendbar");
-    var sticky = header.offsetTop;
-    function stickFunc(){
-
+    // var divFooter = document.getElementById("divFooter");
+    function stickHeadFunc(){
         if (window.pageYOffset >= 204){  
             header.classList.add("sticky");
-        }
-        else{
+        } else {
             header.classList.remove("sticky");
         }
     };
+
+    // window.onscroll = function() {stickFootFunc()};
+    // var divFooter = document.getElementById("divFooter");
+    // function stickFootFunc(){
+    //     if (window.pageYOffset <= 2000) {
+    //         divFooter.classList.add("stickyBelow");
+    //     } else {
+    //         divFooter.classList.remove("stickyBelow");
+    //     }
+    // };
+    // implement a sticky footer, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
+    // var winHeight = window.innerHeight;
+    // var bodyHeight = document.body.offsetHeight;
+    // window.onscroll = function() {stickFootFunc()};
+    // var divFooter = document.getElementById("divFooter");
+    // var stickyBelow = footer.offset;
+    //     function stickFootFunc(){
+    //         if (window.pageYOffset >= 204){  
+    //             divFooter.classList.add("stickyBelow");
+    //         }
+    //         else{
+    //             divFooter.classList.remove("stickyBelow");
+    //         }
+    //     };
 
     drawSatellites(topTenData, x);
 
@@ -353,6 +395,7 @@ function drawSatellites(data, x_scale) {
     var increments = [0, 50, 50, 50, 50, 50, 50, 50, 50, 100, 150, 200, 200, 200, 200, 250];
     var breakdowns = [0, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 10000, 20000, 30000, 40000, 50000, 175000];
     var var_name_str, var_val_str, rangeMax, rangeMin;
+    var this_y_scale;
     for (var i = 0; i < 15; i++) {
         var_name_str = "y_scale_" + breakdowns[i].toString() + "to" + breakdowns[i+1].toString();
         rangeMax = height - increments.slice(0, i+1).reduce(arrSum);
@@ -360,7 +403,7 @@ function drawSatellites(data, x_scale) {
         var_val_str = "d3.scaleLinear().range(["+ rangeMax +","+ rangeMin +"]).domain([" + breakdowns[i] + "," + breakdowns[i+1] + "])";
         eval(var_name_str + " = " + var_val_str);
         // var ans = eval(var_name_str + "(300)");
-        var this_y_scale = eval(var_name_str);
+        this_y_scale = eval(var_name_str);
         var offset = 30;
         if (breakdowns[i+1] >= 100000) {
             offset = 60;
@@ -386,7 +429,19 @@ function drawSatellites(data, x_scale) {
             .attr("font-size", "16px")
             .text(breakdowns[i+1].toString());
         
+        // insert annotations for orbit levels: LEO at 2000km
+        // if (breakdowns[i+1] = 2000) {
+        //     g.append("line")
+        //     .attr("x1", 0)
+        //     .attr("x2", width)
+        //     .attr("y1", this_y_scale(2000))
+        //     .attr("y2", this_y_scale(2000))
+        //     .attr("stroke", "#ffffff")
+        //     .attr("stroke-width", "10px");
+        // }
     }
+
+
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
         x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
