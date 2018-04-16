@@ -297,7 +297,17 @@ function satelliteCallback(err, data) {
         .attr("width", function(d) { return x(d.proportionSatellites);})
         .attr("height", 50)
         .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.7);
+        .attr("opacity", 0.7)
+        .on("mouseover", function(d) {
+            d3.select(this).attr("opacity", 1);
+            d3.selectAll("node").filter(function(d) {
+                return d.key == data.key;
+            })
+            .style("opacity", 1);
+        })
+        .on("mouseout", function() {
+            d3.select(this).attr("opacity", 0.7);
+        });
     // footerBars.selectAll(".bar")
     //     .enter().append("text")
 
@@ -459,6 +469,7 @@ function drawSatellites(data, x_scale) {
             }
             if((satellite.user == "Commercial") && (document.getElementById("commercialCheck").checked == true)){
                 g.append("circle")
+                    .attr("class", "node")
                     .attr("cx", x_coord)
                     .attr("cy", y_coord)
                     .attr("r", (satellite.massDiam/2))
@@ -518,6 +529,7 @@ function drawSatellites(data, x_scale) {
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
                 g.append("path")
+                    .attr("class", "node")
                     .attr("d", lineFunction(lineData))
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
@@ -561,6 +573,7 @@ function drawSatellites(data, x_scale) {
             }
             else if (satellite.user == "Military" && document.getElementById("militaryCheck").checked == true){
                 g.append("rect")
+                    .attr("class", "node")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
                     .attr("width", satellite.massDiam)
@@ -606,6 +619,7 @@ function drawSatellites(data, x_scale) {
             }
             else if (satellite.user == "Government" && document.getElementById("governmentCheck").checked == true){
                 g.append("rect")
+                    .attr("class", "node")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
                     .attr("width", satellite.massDiam)
@@ -669,6 +683,7 @@ function drawSatellites(data, x_scale) {
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
                 g.append("path")
+                    .attr("class", "node")
                     .attr("d", hexFunction(hexLineData))
                     .attr("fill", element.color)
                     .attr("opacity", 0.7)
@@ -712,26 +727,31 @@ function drawSatellites(data, x_scale) {
                             d3.select(this).style("stroke", "none");
                             d3.select("#sattooltip").classed("hidden", true);
                         });
+
+                
+            
             }
+            
         });
     });
 }
 
 // Create a d3 force simulation
-var simulation = d3.forceSimulation();
-simulation.force("x", d3.forceX(d => x_scale(d.x)).strength(0.5)) // default strength is 0.1
-.force("y", d3.forceY(d => y_scale(d.y))) // yScale goes from -3 to 3, so 0 sets the middle
-.force("collision", d3.forceCollide(d => rScale(d.b)));
+                // var simulation = d3.forceSimulation();
+                // var node = d3.selectAll("node");
+                // simulation.force("x", d3.forceX(d => x_scale(d.x)).strength(0.5)) // default strength is 0.1
+                // .force("y", d3.forceY(d => y_scale(d.y)))
+                // .force("collision", d3.forceCollide(d => rScale(d.b)));
 
-// simulation.nodes(nodes).on("tick", updateDisplay);
+                // simulation.nodes(node).on("tick", updateDisplay);
 
-// updateDisplay();
+                // updateDisplay();
 
-// function updateDisplay() {
-//     circles
-//     .attr("cx", function(d) { return d.x; })
-//     .attr("cy", function(d) { return d.y; });
-// }
+                // function updateDisplay() {
+                //     node
+                //     .attr("x", function(d) { return d.x; })
+                //     .attr("y", function(d) { return d.y; });
+                // }
 
 // implement range slider
 var yearSlider = d3.select("#yearslider");
