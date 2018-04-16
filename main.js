@@ -343,6 +343,10 @@ function drawSatellites(data, x_scale) {
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
+            randYOffset = (Math.random()*60)-30;
+            if(satellite.altitude>34000 && satellite.altitude<36000){
+                y_coord+=randYOffset;
+            }
             if((satellite.user == "Commercial") && (document.getElementById("commercialCheck").checked == true)){
                 g.append("circle")
                     .attr("cx", x_coord)
