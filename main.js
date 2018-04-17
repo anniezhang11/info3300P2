@@ -336,7 +336,7 @@ function drawBars(satelliteData) {
             d3.select("#numsats")
                 .text(d.numberSatellites);
             d3.select("#propsats")
-                .text(d.proportionSatellites*100);
+                .text((d.proportionSatellites*100).toFixed(2));
             d3.select("#gdp")
                 .text((d.gdp/1000000000).toFixed(2));
             d3.select("#bartooltip").classed("hidden", false);
@@ -346,37 +346,43 @@ function drawBars(satelliteData) {
             d3.select("#bartooltip").classed("hidden", true);
             d3.select(this).attr("opacity", 0.7);
         });
+    svgBars.append('g').append('line')
+        .attr('x1', x(0))
+        .attr('x2', x(0))
+        .attr('y1', y(0))
+        .attr('y2', height)
+        .attr('color', "white");
 
     // create footer
-    var footer = d3.select("#svgFooter");
-    var padding = 0,
-        margin = {top: 0, right: 20, bottom: 0, left: 100},
-        width = 1000,
-        height = 50;
-    var footerBars = footer.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    footerBars.selectAll(".bar")
-        .data(topTenData)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return x(d.accumulateSatellites); })
-        .attr("y", function(d) { return 0; })
-        .attr("width", function(d) { return x(d.proportionSatellites);})
-        .attr("height", 50)
-        .attr("fill", function(d) { return d.color; })
-        .attr("opacity", 0.7)
-        .on("mouseover", function(d) {
-            d3.select(this).attr("opacity", 1);
-            d3.selectAll("node").filter(function(d) {
-                return d.key == data.key;
-            })
-            .style("opacity", 1);
-        })
-        .on("mouseout", function() {
-            d3.select(this).attr("opacity", 0.7);
-        });
-    footerBars.enter().append("text")
-        .text(function(d) {return d.country; });
+    // var footer = d3.select("#svgFooter");
+    // var padding = 0,
+    //     margin = {top: 0, right: 20, bottom: 0, left: 100},
+    //     width = 1000,
+    //     height = 50;
+    // var footerBars = footer.append("g")
+    //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // footerBars.selectAll(".bar")
+    //     .data(topTenData)
+    //     .enter().append("rect")
+    //     .attr("class", "bar")
+    //     .attr("x", function(d) { return x(d.accumulateSatellites); })
+    //     .attr("y", function(d) { return 0; })
+    //     .attr("width", function(d) { return x(d.proportionSatellites);})
+    //     .attr("height", 50)
+    //     .attr("fill", function(d) { return d.color; })
+    //     .attr("opacity", 0.7)
+    //     .on("mouseover", function(d) {
+    //         d3.select(this).attr("opacity", 1);
+    //         d3.selectAll("node").filter(function(d) {
+    //             return d.key == data.key;
+    //         })
+    //         .style("opacity", 1);
+    //     })
+    //     .on("mouseout", function() {
+    //         d3.select(this).attr("opacity", 0.7);
+    //     });
+    // footerBars.enter().append("text")
+    //     .text(function(d) {return d.country; });
 
     
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
