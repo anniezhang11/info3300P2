@@ -28,103 +28,93 @@ function parseSatelliteRow(row) {
     var yearSlider = document.getElementById("yearslider");
     var date = row["Date of Launch"];
     var year = date.substring(date.length-2, date.length);
-    var valid = false;
-    if (yearSlider.value >= 2000) {
-        if ((year > 0 && year <= yearSlider.value.toString().substring(2,4)) || year >= 74)  {
-            valid = true;    
-        }
-    } else if (year >=88 && year <= yearSlider.value.toString().substring(2,4)) {
-        valid = true;
+    var launchMass;
+    var orbitsPerDay;
+    var perigee, apogee, altitude;
+    var country;
+    var massDiam;
+    var altitudeCategory;
+    if (row["Country of Operator/Owner"] == "USA") {
+        country = "United States";
+    } else if (row["Country of Operator/Owner"] == "Russia") {
+        country = "Russian Federation";
+    } else {
+        country = row["Country of Operator/Owner"];
     }
-    if (valid) {
-        var launchMass;
-        var orbitsPerDay;
-        var perigee, apogee, altitude;
-        var country;
-        var massDiam;
-        var altitudeCategory;
-        if (row["Country of Operator/Owner"] == "USA") {
-            country = "United States";
-        } else if (row["Country of Operator/Owner"] == "Russia") {
-            country = "Russian Federation";
-        } else {
-            country = row["Country of Operator/Owner"];
-        }
-        if (row["Launch Mass (kg.)"] > 0) {
-            launchMass = row["Launch Mass (kg.)"].replace("+","").replace(",","");
-        } else {
-            launchMass = "unknown";
-        }
-        if (row["Period (minutes)"].includes("days")) {
-            orbitsPerDay = 1/(row["Period (minutes)"].substring(0,row["Period (minutes)"].length - 5));
-        } else {
-            orbitsPerDay = row["Period (minutes)"]/1440;
-        }
-        perigee = Number(row["Perigee (km)"].replace(",",""));
-        apogee = Number(row["Apogee (km)"].replace(",",""));
-        altitude = (Number(perigee) + Number(apogee))/2;
+    if (row["Launch Mass (kg.)"] > 0) {
+        launchMass = row["Launch Mass (kg.)"].replace("+","").replace(",","");
+    } else {
+        launchMass = "unknown";
+    }
+    if (row["Period (minutes)"].includes("days")) {
+        orbitsPerDay = 1/(row["Period (minutes)"].substring(0,row["Period (minutes)"].length - 5));
+    } else {
+        orbitsPerDay = row["Period (minutes)"]/1440;
+    }
+    perigee = Number(row["Perigee (km)"].replace(",",""));
+    apogee = Number(row["Apogee (km)"].replace(",",""));
+    altitude = (Number(perigee) + Number(apogee))/2;
 
-        if (launchMass == "unknown") {
-            massDiam = 15;
-        } else if (Number(launchMass)>10000) {
-            massDiam = 21;
-        } else if (Number(launchMass) > 5000) {
-            massDiam = 18;
-        } else if (Number(launchMass) > 1000) {
-            massDiam = 15;
-        } else if (Number(launchMass) > 500) {
-            massDiam = 12;
-        } else if (Number(launchMass) > 100) {
-            massDiam = 9;
-        } else {
-            massDiam = 6;
-        }
+    if (launchMass == "unknown") {
+        massDiam = 15;
+    } else if (Number(launchMass)>10000) {
+        massDiam = 21;
+    } else if (Number(launchMass) > 5000) {
+        massDiam = 18;
+    } else if (Number(launchMass) > 1000) {
+        massDiam = 15;
+    } else if (Number(launchMass) > 500) {
+        massDiam = 12;
+    } else if (Number(launchMass) > 100) {
+        massDiam = 9;
+    } else {
+        massDiam = 6;
+    }
 
-        if (altitude < 300) {
-            altitudeCategory = 0;
-        } else if (altitude < 400) {
-            altitudeCategory = 1;
-        } else if (altitude < 500) {
-            altitudeCategory = 2;
-        } else if (altitude < 600) {
-            altitudeCategory = 3;
-        } else if (altitude < 700) {
-            altitudeCategory = 4;
-        } else if (altitude < 800) {
-            altitudeCategory = 5;
-        } else if (altitude < 900) {
-            altitudeCategory = 6;
-        } else if (altitude < 1000) {
-            altitudeCategory = 7;
-        } else if (altitude < 2000) {
-            altitudeCategory = 8;
-        } else if (altitude < 10000) {
-            altitudeCategory = 9;
-        } else if (altitude < 20000) {
-            altitudeCategory = 10;
-        } else if (altitude < 30000) {
-            altitudeCategory = 11;
-        } else if (altitude < 40000) {
-            altitudeCategory = 12;
-        } else if (altitude < 50000) {
-            altitudeCategory = 13;
-        } else {
-            altitudeCategory = 14;
-        }
-        return {
-            name: row["Current Official Name of Satellite"],
-            series: row["Series"],
-            countryOperator: country, //gdp
-            countryContractor: row["Country of Contractor"],
-            user: row["Users"],
-            purpose: row["Purpose"],
-            altitude: altitude,
-            altitudeCategory: altitudeCategory,
-            launchMass: launchMass,
-            massDiam: massDiam,
-            launchDate: row["Date of Launch"],
-            orbitsPerDay: orbitsPerDay
-        }
+    if (altitude < 300) {
+        altitudeCategory = 0;
+    } else if (altitude < 400) {
+        altitudeCategory = 1;
+    } else if (altitude < 500) {
+        altitudeCategory = 2;
+    } else if (altitude < 600) {
+        altitudeCategory = 3;
+    } else if (altitude < 700) {
+        altitudeCategory = 4;
+    } else if (altitude < 800) {
+        altitudeCategory = 5;
+    } else if (altitude < 900) {
+        altitudeCategory = 6;
+    } else if (altitude < 1000) {
+        altitudeCategory = 7;
+    } else if (altitude < 2000) {
+        altitudeCategory = 8;
+    } else if (altitude < 10000) {
+        altitudeCategory = 9;
+    } else if (altitude < 20000) {
+        altitudeCategory = 10;
+    } else if (altitude < 30000) {
+        altitudeCategory = 11;
+    } else if (altitude < 40000) {
+        altitudeCategory = 12;
+    } else if (altitude < 50000) {
+        altitudeCategory = 13;
+    } else {
+        altitudeCategory = 14;
+    }
+    return {
+        name: row["Current Official Name of Satellite"],
+        series: row["Series"],
+        countryOperator: country, //gdp
+        countryContractor: row["Country of Contractor"],
+        user: row["Users"],
+        purpose: row["Purpose"],
+        altitude: altitude,
+        altitudeCategory: altitudeCategory,
+        launchMass: launchMass,
+        massDiam: massDiam,
+        launchDate: row["Date of Launch"],
+        orbitsPerDay: orbitsPerDay
     }
 }
 
@@ -156,15 +146,8 @@ function highlight(series) {
 
 function satelliteCallback(err, data) {
     satelliteData = data;
-    // console.log(gdpData);
-    console.log(satelliteData);
 
-    byCountry = d3.nest()
-        .key(function(d){ return d.countryOperator;})
-        .entries(data);
-    byCountry = byCountry.sort(customCompare);
-
-    drawBars(byCountry);
+    drawBars(satelliteData);
     
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
 
@@ -206,17 +189,40 @@ function satelliteCallback(err, data) {
         d3.select("#satellites").selectAll("circle").remove();
         d3.select("#satellites").selectAll("path").remove();
         d3.select("#satellites").selectAll("rect").remove();
-        drawBars(byCountry);
+        drawBars(satelliteData);
     };
 }
 
-function drawBars(byCountry) {
+function drawBars(satelliteData) {
     // extracting the ten countries with the most satellites
+    var thisData = [];
+    var yearSlider = document.getElementById("yearslider");
+    for (var i=0; i<satelliteData.length; i++) {
+        var date = satelliteData[i].launchDate;
+        var year = date.substring(date.length-2, date.length);
+        var valid = false;
+        if (yearSlider.value >= 2000) {
+            if ((year <= yearSlider.value.toString().substring(2,4)) || year >= 74 || year == 0)  {
+                valid = true;    
+            }
+        } else if (year >=88 && year <= yearSlider.value.toString().substring(2,4)) {
+            valid = true;
+        }
+        if (valid) {
+            thisData.push(satelliteData[i]);
+        }
+    }
+    byCountry = d3.nest()
+        .key(function(d){ return d.countryOperator;})
+        .entries(thisData);
+    byCountry = byCountry.sort(customCompare);
+
     var idx = 0;
     var count = 0;
     var topTen = [];
-    while (count < 10) {
-        if (byCountry[idx].key !== "Multinational" && byCountry[idx].key !== "ESA") {
+    var bound = Math.min(10, byCountry.length);
+    while (count < bound && idx < byCountry.length) {
+        if (byCountry[idx].key !== "Multinational" && byCountry[idx].key !== "ESA" && byCountry[idx].key.indexOf('/') <= -1) {
             topTen.push(byCountry[idx]);
             count++;
         }
@@ -224,39 +230,39 @@ function drawBars(byCountry) {
     }
 
     // group the remainder into a single category
-    var remainder = byCountry.splice(12);
+    // var remainder = byCountry.splice(12);
 
-    function findWithAttr(array, attr, value) {
-        for(var i = 0; i < array.length; i += 1) {
-            if(array[i][attr] === value) {
-                return i;
-            }
-        }
-        return -1;
-    };
+    // function findWithAttr(array, attr, value) {
+    //     for(var i = 0; i < array.length; i += 1) {
+    //         if(array[i][attr] === value) {
+    //             return i;
+    //         }
+    //     }
+    //     return -1;
+    // };
 
-    var mult_idx = findWithAttr(byCountry, "key", "Multinational");
-    remainder.push(byCountry[mult_idx]);
-    var esa_idx = findWithAttr(byCountry, "key", "ESA");
-    remainder.push(byCountry[esa_idx]);
-    // console.log(remainder);
+    // var mult_idx = findWithAttr(byCountry, "key", "Multinational");
+    // remainder.push(byCountry[mult_idx]);
+    // var esa_idx = findWithAttr(byCountry, "key", "ESA");
+    // remainder.push(byCountry[esa_idx]);
+    // // console.log(remainder);
 
-    var flatRemainder = [];
-    function flatten(array) {
-        for (var i=0; i < array.length; i++) {
-            var current = array[i].values;
-            for (var j=0; j < current.length; j++) {
-                flatRemainder.push(current[j])
-            }
-        }
-        return flatRemainder;
-    }
-    flatten(remainder);
-    topTen.push({key: "Other", values: flatRemainder});
+    // var flatRemainder = [];
+    // function flatten(array) {
+    //     for (var i=0; i < array.length; i++) {
+    //         var current = array[i].values;
+    //         for (var j=0; j < current.length; j++) {
+    //             flatRemainder.push(current[j])
+    //         }
+    //     }
+    //     return flatRemainder;
+    // }
+    // flatten(remainder);
+    // topTen.push({key: "Other", values: flatRemainder});
 
     // calculate total satellites
     var totalSatellites = 0;
-    for (var i=0; i < 11; i++) {
+    for (var i=0; i < count; i++) {
         totalSatellites += topTen[i].values.length;
     };
     // console.log(totalSatellites);
@@ -265,8 +271,8 @@ function drawBars(byCountry) {
     var thisCountryData;
     var acc = 0;
     var colors = ["#7f2962", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1", "#c1c1c1"];
-    for (var i=0; i < 11; i++) {
-        if (topTen[i].key !== "Other") {
+    for (var i=0; i < count; i++) {
+        // if (topTen[i].key !== "Other") {
             thisCountryData = {
                 name: topTen[i].key,
                 numberSatellites: topTen[i].values.length,
@@ -276,23 +282,26 @@ function drawBars(byCountry) {
                 satellites: topTen[i].values, 
                 color: colors[i]
             };
-        } else {
-            thisCountryData = {
-                name: topTen[i].key,
-                numberSatellites: topTen[i].values.length,
-                proportionSatellites: (topTen[i].values.length/totalSatellites),
-                accumulateSatellites: acc,
-                gdp: 0,
-                satellites: topTen[i].values, 
-                color: colors[i]
-            };
-        }
+        // } else {
+        //     thisCountryData = {
+        //         name: topTen[i].key,
+        //         numberSatellites: topTen[i].values.length,
+        //         proportionSatellites: (topTen[i].values.length/totalSatellites),
+        //         accumulateSatellites: acc,
+        //         gdp: 0,
+        //         satellites: topTen[i].values, 
+        //         color: colors[i]
+        //     };
+        // }
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
 
     d3.select("#gdpbars").selectAll("rect").remove();
     d3.select("#gdpbars").selectAll("g").remove();
+    d3.select("#satellites").selectAll("circle").remove();
+    d3.select("#satellites").selectAll("path").remove();
+    d3.select("#satellites").selectAll("rect").remove();
     
     var svgBars = d3.select("#gdpbars");
     var padding = 0,
@@ -313,7 +322,7 @@ function drawBars(byCountry) {
         .attr("x", function(d) { return x(d.accumulateSatellites); })
         .attr("y", function(d) { return 0; })
         .attr("width", function(d) { return x(d.proportionSatellites);})
-        .attr("height", function(d) { return height - y(d.gdp); })
+        .attr("height", function(d) { return height - y(d.gdp) + 50; })
         .attr("fill", function(d) { return d.color; })
         .attr("opacity", 0.7)
         .on("mouseover", function(d) {
@@ -488,7 +497,6 @@ function drawSatellites(data, x_scale) {
 
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start) + x_start;
-            console.log(satellite);
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
@@ -794,5 +802,5 @@ function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-    d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);    
+    drawBars(satelliteData);   
 }
