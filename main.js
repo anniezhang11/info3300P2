@@ -146,7 +146,6 @@ function highlight(series) {
 
 function satelliteCallback(err, data) {
     satelliteData = data;
-
     drawBars(satelliteData);
     
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
@@ -346,12 +345,28 @@ function drawBars(satelliteData) {
             d3.select("#bartooltip").classed("hidden", true);
             d3.select(this).attr("opacity", 0.7);
         });
-    svgBars.append('g').append('line')
-        .attr('x1', x(0))
-        .attr('x2', x(0))
-        .attr('y1', y(0))
-        .attr('y2', height)
-        .attr('color', "white");
+
+    svgBars.append('g')
+        .append('line')
+        .attr("transform", "translate(90, 0)")
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', height + 50)
+        .attr('stroke-width', "1px")
+        .attr("stroke", "#85858d")
+        .attr("marker-end", "url(#arrow)");
+
+    svgBars.append('g')
+        .append('text')
+        .attr("x", 75)
+        .attr("y", 0)
+        .attr("text-anchor", "end")
+        .attr("alignment-baseline", "hanging")
+        .attr("fill", "#85858d")
+        .attr("font-family", "Rajdhani")
+        .attr("font-size", "16px")
+        .text("GDP");
 
     // create footer
     // var footer = d3.select("#svgFooter");
@@ -515,7 +530,7 @@ function drawSatellites(data, x_scale) {
                     .attr("class", "node")
                     .attr("cx", x_coord)
                     .attr("cy", y_coord)
-                    .attr("r", (satellite.massDiam/2))
+                    .attr("r", (Math.sqrt(satellite.massDiam*satellite.massDiam/Math.PI)))
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
@@ -559,15 +574,16 @@ function drawSatellites(data, x_scale) {
                         d3.select("#sattooltip").classed("hidden", true);
                         highlight(null);
                     });
-            }else if(satellite.user == "Civil" && document.getElementById("civilCheck").checked == true){
-                var x1 = x_coord-(satellite.massDiam/2);
-                var h = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
+            } else if(satellite.user == "Civil" && document.getElementById("civilCheck").checked == true){
+                var side = Math.sqrt((2*satellite.massDiam*satellite.massDiam)/Math.sqrt(3));
+                var x1 = x_coord-(side/2);
+                var h = Math.sqrt((side*side)-((side/2)*(side/2)));
                 var y1 = y_coord+(h/2);
                 var x2 = x_coord;
                 var y2 = y_coord-(h/2);
-                var x3 = x_coord+(satellite.massDiam/2);
+                var x3 = x_coord+(side/2);
                 var y3 = y_coord+(h/2);
-                var lineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}];
+                var lineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}, {"x":x1, "y":y1}];
                 var lineFunction = d3.line()
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
@@ -661,12 +677,13 @@ function drawSatellites(data, x_scale) {
                         });
             }
             else if (satellite.user == "Government" && document.getElementById("governmentCheck").checked == true){
+                var side = satellite.massDiam;
                 g.append("rect")
                     .attr("class", "node")
                     .attr("x", (x_coord-(satellite.massDiam/2)))
                     .attr("y", (y_coord-(satellite.massDiam/2)))
-                    .attr("width", satellite.massDiam)
-                    .attr("height", satellite.massDiam)
+                    .attr("width", side)
+                    .attr("height", side)
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
                     .attr('transform', 'rotate(-45 ' + x_coord + ' ' + y_coord +')')
@@ -708,20 +725,21 @@ function drawSatellites(data, x_scale) {
                         });
             }
             else if((satellite.user.includes("/")) && (document.getElementById("multipleCheck").checked == true)){
-                var hHex = Math.sqrt((satellite.massDiam*satellite.massDiam)-((satellite.massDiam/2)*(satellite.massDiam/2)));
+                var side = Math.sqrt((2*satellite.massDiam*satellite.massDiam)/(3*Math.sqrt(3)));
+                var hHex = Math.sqrt((side*side)-((side/2)*(side/2)));
                 var y1 = y_coord + hHex;
                 var x1 = x_coord - (hHex/2);
                 var y2 = y_coord;
-                var x2 = x_coord - satellite.massDiam;
+                var x2 = x_coord - side;
                 var y3 = y_coord - hHex;
                 var x3 = x_coord - (hHex/2);
                 var y4 = y_coord - hHex;
                 var x4 = x_coord + (hHex/2);
                 var y5 = y_coord;
-                var x5 = x_coord +satellite.massDiam;
+                var x5 = x_coord +side;
                 var y6 = y_coord + hHex;
                 var x6 = x_coord + (hHex/2);
-                var hexLineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}, {"x":x4, "y":y4}, {"x":x5, "y":y5}, {"x":x6, "y":y6}];
+                var hexLineData = [{"x":x1, "y":y1}, {"x":x2, "y":y2}, {"x":x3, "y":y3}, {"x":x4, "y":y4}, {"x":x5, "y":y5}, {"x":x6, "y":y6}, {"x":x1, "y":y1}];
                 var hexFunction = d3.line()
                     .x(function(d) { return d.x; })
                     .y(function(s) { return s.y; });
@@ -754,6 +772,7 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.launchDate);
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
+<<<<<<< HEAD
                         d3.select("#flag")
                             // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
@@ -765,6 +784,15 @@ function drawSatellites(data, x_scale) {
                             .attr("y", yPosition + 10)
                             .attr("height", 30)
                             .attr("width", 40);
+=======
+                        // d3.select("#flag")
+                        //     // .attr("src",  function(d) { return d.img;})
+                        //     .attr("src",  function(d) { return "flags/" + ad + ".svg"})
+                        //     .attr("x", xPosition + 250)
+                        //     .attr("y", yPosition + 10)
+                        //     .attr("height", 30)
+                        //     .attr("width", 40);
+>>>>>>> ec42fc058f9a71a7b344a404e0fe0e6cc7076fc3
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
