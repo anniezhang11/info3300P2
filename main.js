@@ -58,15 +58,15 @@ function parseSatelliteRow(row) {
     if (launchMass == "unknown") {
         massDiam = 15;
     } else if (Number(launchMass)>10000) {
-        massDiam = 21;
+        massDiam = 30;
     } else if (Number(launchMass) > 5000) {
-        massDiam = 18;
+        massDiam = 25;
     } else if (Number(launchMass) > 1000) {
-        massDiam = 15;
+        massDiam = 20;
     } else if (Number(launchMass) > 500) {
-        massDiam = 12;
+        massDiam = 15;
     } else if (Number(launchMass) > 100) {
-        massDiam = 9;
+        massDiam = 10;
     } else {
         massDiam = 6;
     }

@@ -56,6 +56,18 @@ img {
   color: #85858d;
 }
 
+#scalelegend {
+  margin: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  padding-top: 10px;
+  font-weight: 500;
+  color: #85858d;
+}
+
+
 /* legend bar style */
 
 #legendbar {
