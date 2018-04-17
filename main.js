@@ -80,19 +80,20 @@ function parseSatelliteRow(row) {
             massDiam = 6;
         }
 
-    return {
-        name: row["Current Official Name of Satellite"],
-        series: row["Series"],
-        countryOperator: country, //gdp
-        countryContractor: row["Country of Contractor"],
-        user: row["Users"],
-        purpose: row["Purpose"],
-        altitude: altitude,
-        altitudeCategory: altitudeCategory,
-        launchMass: launchMass,
-        massDiam: massDiam,
-        launchDate: row["Date of Launch"],
-        orbitsPerDay: orbitsPerDay
+        return {
+            name: row["Current Official Name of Satellite"],
+            series: row["Series"],
+            countryOperator: country, //gdp
+            countryContractor: row["Country of Contractor"],
+            user: row["Users"],
+            purpose: row["Purpose"],
+            altitude: altitude,
+            altitudeCategory: altitudeCategory,
+            launchMass: launchMass,
+            massDiam: massDiam,
+            launchDate: row["Date of Launch"],
+            orbitsPerDay: orbitsPerDay
+        }
     }
 }
 
@@ -117,7 +118,7 @@ d3.json("countrycodes.json", function (data) {
 
 function getCountryCode2(countryCode3) {
      return codes[0].countryCode3.toLowerCase();
-};
+}
 
 function highlight(series) {
     if (series == null) d3.selectAll(".node").classed("active", false);
@@ -172,7 +173,7 @@ function satelliteCallback(err, data) {
         changeFunc();
 
     };
-    function  changeFunc(){
+    function changeFunc(){
         d3.select("#satellites").selectAll("circle").remove();
         d3.select("#satellites").selectAll("path").remove();
         d3.select("#satellites").selectAll("rect").remove();
@@ -230,7 +231,7 @@ function drawBars(byCountry) {
         totalSatellites += topTen[i].values.length;
     };
     console.log(totalSatellites);
-
+    topTenData = [];
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
@@ -242,10 +243,11 @@ function drawBars(byCountry) {
                 numberSatellites: topTen[i].values.length,
                 proportionSatellites: (topTen[i].values.length/totalSatellites),
                 accumulateSatellites: acc,
-                gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[2016]),
+                gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[document.getElementById("yearslider").value]),
                 satellites: topTen[i].values, 
                 color: colors[i]
             };
+            console.log(gdpData.find(x => x.countryName == topTen[i].key));
         } else {
             thisCountryData = {
                 name: topTen[i].key,
@@ -260,17 +262,11 @@ function drawBars(byCountry) {
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
-    console.log(topTenData);
-    console.log(acc);
 
-    console.log(d3.select("#gdpbars").selectAll("g").selectAll("rect"));
     d3.select("#gdpbars").selectAll("rect").remove();
     d3.select("#gdpbars").selectAll("g").remove();
-    // d3.select("#gdpbars").remove();
-    // console.log(d3.select("#gdpbars").select("g").select); 
     
     var svgBars = d3.select("#gdpbars");
-    console.log(svgBars);
     var padding = 0,
         margin = {top: 0, right: 20, bottom: 20, left: 100},
         width = 1000,
@@ -282,7 +278,6 @@ function drawBars(byCountry) {
     var svgDim = svgBars.node().getBoundingClientRect();
     x.domain([0, 1]);
     y.domain([0, d3.max(topTenData, function(d) { return d.gdp; })]);
-
     g.selectAll(".bar")
         .data(topTenData)
         .enter().append("rect")
@@ -677,7 +672,5 @@ function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-    d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
-    d3.select("#gdpBars").selectAll("g").remove();
     drawBars(byCountry);
 }
