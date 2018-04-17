@@ -314,7 +314,6 @@ function drawBars(byCountry) {
             d3.select("#bartooltip").classed("hidden", true);
             d3.select(this).attr("opacity", 0.7);
         });
-<<<<<<< HEAD
 
     // create footer
     var footer = d3.select("#svgFooter");
@@ -344,8 +343,8 @@ function drawBars(byCountry) {
         .on("mouseout", function() {
             d3.select(this).attr("opacity", 0.7);
         });
-    // footerBars.selectAll(".bar")
-    //     .enter().append("text")
+    footerBars.enter().append("text")
+        .text(function(d) {return d.country; });
 
     
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
@@ -385,8 +384,6 @@ function drawBars(byCountry) {
     //         }
     //     };
 
-=======
->>>>>>> ab5f310dcf2fa019d55ee13aa4c6c4ea04e63046
     drawSatellites(topTenData, x);
 }
 
@@ -721,7 +718,7 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select("#flag")
                             // .attr("src",  function(d) { return d.img;})
-                            .attr("src",  "flags/ad.svg")
+                            .attr("src",  function(d) { return "flags/" + ad + ".svg"})
                             .attr("x", xPosition + 250)
                             .attr("y", yPosition + 10)
                             .attr("height", 30)
@@ -742,7 +739,7 @@ function drawSatellites(data, x_scale) {
             
         });
     });
-}
+};
 
 // Create a d3 force simulation
                 // var simulation = d3.forceSimulation();
@@ -769,11 +766,11 @@ function drawSatellites(data, x_scale) {
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
 
-function sliderHandler() {
-    var yearSlider = document.getElementById("yearslider");
-    var sliderLabel = document.getElementById("sliderlabel");
-    sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-    d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
-    d3.select("#gdpBars").selectAll("g").remove();
-    drawBars(byCountry);
-}
+// function sliderHandler() {
+//     var yearSlider = document.getElementById("yearslider");
+//     var sliderLabel = document.getElementById("sliderlabel");
+//     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
+//     d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
+//     d3.select("#gdpBars").selectAll("g").remove();
+//     drawBars(byCountry);
+// }
