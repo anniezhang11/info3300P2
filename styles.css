@@ -215,7 +215,6 @@ input[type=range]::-webkit-slider-runnable-track {
   border: 0px solid #000101;
 }
 
-
 .sticky {
   position: fixed;
   top: 0;
@@ -256,8 +255,6 @@ input[type=range]::-webkit-slider-runnable-track {
 
 #bartooltip {
   position: absolute;
-  width: 180px;
-  height: auto;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.85);
   -webkit-border-radius: 10px;
@@ -282,8 +279,6 @@ input[type=range]::-webkit-slider-runnable-track {
 
 #sattooltip {
   position: absolute;
-  width: 200px;
-  height: auto;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.85);
   -webkit-border-radius: 10px;
@@ -339,4 +334,9 @@ a {
 
 .node.active {
   fill: white;
+}
+
+img {
+  padding-left: 5px;
+  padding-right: 0px;
 }
