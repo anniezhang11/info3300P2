@@ -346,12 +346,28 @@ function drawBars(satelliteData) {
             d3.select("#bartooltip").classed("hidden", true);
             d3.select(this).attr("opacity", 0.7);
         });
-    svgBars.append('g').append('line')
-        .attr('x1', x(0))
-        .attr('x2', x(0))
-        .attr('y1', y(0))
-        .attr('y2', height)
-        .attr('color', "white");
+
+    svgBars.append('g')
+        .append('line')
+        .attr("transform", "translate(90, 0)")
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', height + 50)
+        .attr('stroke-width', "1px")
+        .attr("stroke", "#85858d")
+        .attr("marker-end", "url(#arrow)");
+
+    svgBars.append('g')
+        .append('text')
+        .attr("x", 75)
+        .attr("y", 0)
+        .attr("text-anchor", "end")
+        .attr("alignment-baseline", "hanging")
+        .attr("fill", "#85858d")
+        .attr("font-family", "Rajdhani")
+        .attr("font-size", "16px")
+        .text("GDP");
 
     // create footer
     // var footer = d3.select("#svgFooter");
