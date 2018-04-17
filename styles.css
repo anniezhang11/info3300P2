@@ -209,9 +209,15 @@ input[type=range]::-webkit-slider-runnable-track {
   top: 0;
   width: 100%;
 }
-  
+
 .sticky + .content {
   padding-top: 102px;
+}
+
+.stickyBelow {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 /* content style */
