@@ -713,7 +713,7 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select("#flag")
                             // .attr("src",  function(d) { return d.img;})
-                            .attr("src",  function(d) { return "flags/" + ad + ".svg"})
+                            .attr("src",  function(d) { return "flags/" + "ad" + ".svg"})
                             .attr("x", xPosition + 250)
                             .attr("y", yPosition + 10)
                             .attr("height", 30)
@@ -761,20 +761,9 @@ function drawSatellites(data, x_scale) {
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
 
-<<<<<<< HEAD
-// function sliderHandler() {
-//     var yearSlider = document.getElementById("yearslider");
-//     var sliderLabel = document.getElementById("sliderlabel");
-//     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-//     d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
-//     d3.select("#gdpBars").selectAll("g").remove();
-//     drawBars(byCountry);
-// }
-=======
 function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
     drawBars(byCountry);
 }
->>>>>>> 71b23c40f4f225ee9b54eb9614adfa34ad43ff04
