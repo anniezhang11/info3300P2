@@ -33,7 +33,7 @@ function parseSatelliteRow(row) {
         if ((year > 0 && year <= yearSlider.value.toString().substring(2,4)) || year >= 74)  {
             valid = true;    
         }
-    } else if (year >=74 && year <= yearSlider.value.toString().substring(2,4)) {
+    } else if (year >=88 && year <= yearSlider.value.toString().substring(2,4)) {
         valid = true;
     }
     if (valid) {
@@ -80,6 +80,37 @@ function parseSatelliteRow(row) {
             massDiam = 6;
         }
 
+        if (altitude < 300) {
+            altitudeCategory = 0;
+        } else if (altitude < 400) {
+            altitudeCategory = 1;
+        } else if (altitude < 500) {
+            altitudeCategory = 2;
+        } else if (altitude < 600) {
+            altitudeCategory = 3;
+        } else if (altitude < 700) {
+            altitudeCategory = 4;
+        } else if (altitude < 800) {
+            altitudeCategory = 5;
+        } else if (altitude < 900) {
+            altitudeCategory = 6;
+        } else if (altitude < 1000) {
+            altitudeCategory = 7;
+        } else if (altitude < 2000) {
+            altitudeCategory = 8;
+        } else if (altitude < 10000) {
+            altitudeCategory = 9;
+        } else if (altitude < 20000) {
+            altitudeCategory = 10;
+        } else if (altitude < 30000) {
+            altitudeCategory = 11;
+        } else if (altitude < 40000) {
+            altitudeCategory = 12;
+        } else if (altitude < 50000) {
+            altitudeCategory = 13;
+        } else {
+            altitudeCategory = 14;
+        }
         return {
             name: row["Current Official Name of Satellite"],
             series: row["Series"],
@@ -112,8 +143,6 @@ function customCompare(a,b) {
 var codes;
 d3.json("countrycodes.json", function (data) {
     codes = data;
-    console.log(codes);
-    console.log(getCountryCode2("USA"));
 })
 
 function getCountryCode2(countryCode3) {
@@ -128,7 +157,7 @@ function highlight(series) {
 function satelliteCallback(err, data) {
     satelliteData = data;
     // console.log(gdpData);
-    // console.log(satelliteData);
+    console.log(satelliteData);
 
     byCountry = d3.nest()
         .key(function(d){ return d.countryOperator;})
@@ -210,7 +239,7 @@ function drawBars(byCountry) {
     remainder.push(byCountry[mult_idx]);
     var esa_idx = findWithAttr(byCountry, "key", "ESA");
     remainder.push(byCountry[esa_idx]);
-    console.log(remainder);
+    // console.log(remainder);
 
     var flatRemainder = [];
     function flatten(array) {
@@ -230,7 +259,7 @@ function drawBars(byCountry) {
     for (var i=0; i < 11; i++) {
         totalSatellites += topTen[i].values.length;
     };
-    console.log(totalSatellites);
+    // console.log(totalSatellites);
     topTenData = [];
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
@@ -247,7 +276,6 @@ function drawBars(byCountry) {
                 satellites: topTen[i].values, 
                 color: colors[i]
             };
-            console.log(gdpData.find(x => x.countryName == topTen[i].key));
         } else {
             thisCountryData = {
                 name: topTen[i].key,
@@ -390,6 +418,7 @@ function drawSatellites(data, x_scale) {
 
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start) + x_start;
+            console.log(satellite);
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
@@ -695,5 +724,5 @@ function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-    drawBars(byCountry);
+    d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);    
 }
