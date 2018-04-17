@@ -328,3 +328,7 @@ a {
 .node.active {
   fill: white;
 }
+
+img {
+  padding-left: 5px;
+}

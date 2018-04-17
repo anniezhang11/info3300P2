@@ -332,6 +332,14 @@ function drawBars(satelliteData) {
                 .style("top", yPosition + "px")
             d3.select("#country")
                 .text(d.name);
+            d3.select("#flag-bar")
+                // .attr("src",  function(d) { return d.img;})
+                .attr("src",  function() { 
+                    var code3 = gdpData.find(x => x.countryName == d.name).countryCode;
+                    return "flags/" + getCountryCode2(code3) + ".svg";
+                })
+                .attr("height", 18)
+                .attr("width",24);
             d3.select("#numsats")
                 .text(d.numberSatellites);
             d3.select("#propsats")
@@ -565,6 +573,15 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
+                        d3.select("#flag-sat")
+                            // .attr("src",  function(d) { return d.img;})
+                            .attr("src",  function() { 
+                                var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
+                                console.log(getCountryCode2(code3));
+                                return "flags/" + getCountryCode2(code3) + ".svg";
+                            })
+                            .attr("height", 15)
+                            .attr("width",20);
                         d3.select("#sattooltip").classed("hidden", false);
                         // highlight(d.series);
                     })
@@ -622,13 +639,22 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
+                        d3.select("#flag-sat")
+                            // .attr("src",  function(d) { return d.img;})
+                            .attr("src",  function() { 
+                                var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
+                                console.log(getCountryCode2(code3));
+                                return "flags/" + getCountryCode2(code3) + ".svg";
+                            })
+                            .attr("height", 15)
+                            .attr("width",20);
                         d3.select("#sattooltip").classed("hidden", false);
-                        })
-                        .on("mouseout", function() {
-                            d3.select(this).attr("opacity", .7);
-                            d3.select(this).style("stroke", "none");
-                            d3.select("#sattooltip").classed("hidden", true);
-                        });
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).attr("opacity", .7);
+                        d3.select(this).style("stroke", "none");
+                        d3.select("#sattooltip").classed("hidden", true);
+                    });
             }
             else if (satellite.user == "Military" && document.getElementById("militaryCheck").checked == true){
                 g.append("rect")
@@ -668,13 +694,22 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
+                        d3.select("#flag-sat")
+                            // .attr("src",  function(d) { return d.img;})
+                            .attr("src",  function() { 
+                                var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
+                                console.log(getCountryCode2(code3));
+                                return "flags/" + getCountryCode2(code3) + ".svg";
+                            })
+                            .attr("height", 15)
+                            .attr("width",20);
                         d3.select("#sattooltip").classed("hidden", false);
-                        })
-                        .on("mouseout", function() {
-                            d3.select(this).attr("opacity", .7);
-                            d3.select(this).style("stroke", "none");
-                            d3.select("#sattooltip").classed("hidden", true);
-                        });
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).attr("opacity", .7);
+                        d3.select(this).style("stroke", "none");
+                        d3.select("#sattooltip").classed("hidden", true);
+                    });
             }
             else if (satellite.user == "Government" && document.getElementById("governmentCheck").checked == true){
                 var side = satellite.massDiam;
@@ -716,13 +751,22 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
+                        d3.select("#flag-sat")
+                            // .attr("src",  function(d) { return d.img;})
+                            .attr("src",  function() { 
+                                var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
+                                console.log(getCountryCode2(code3));
+                                return "flags/" + getCountryCode2(code3) + ".svg";
+                            })
+                            .attr("height", 15)
+                            .attr("width",20);
                         d3.select("#sattooltip").classed("hidden", false);
-                        })
-                        .on("mouseout", function() {
-                            d3.select(this).attr("opacity", .7);
-                            d3.select(this).style("stroke", "none");
-                            d3.select("#sattooltip").classed("hidden", true);
-                        });
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).attr("opacity", .7);
+                        d3.select(this).style("stroke", "none");
+                        d3.select("#sattooltip").classed("hidden", true);
+                    });
             }
             else if((satellite.user.includes("/")) && (document.getElementById("multipleCheck").checked == true)){
                 var side = Math.sqrt((2*satellite.massDiam*satellite.massDiam)/(3*Math.sqrt(3)));
@@ -772,27 +816,15 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.launchDate);
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
-<<<<<<< HEAD
-                        d3.select("#flag")
+                        d3.select("#flag-sat")
                             // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
                                 console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
-                            .attr("x", xPosition + 250)
-                            .attr("y", yPosition + 10)
-                            .attr("height", 30)
-                            .attr("width", 40);
-=======
-                        // d3.select("#flag")
-                        //     // .attr("src",  function(d) { return d.img;})
-                        //     .attr("src",  function(d) { return "flags/" + ad + ".svg"})
-                        //     .attr("x", xPosition + 250)
-                        //     .attr("y", yPosition + 10)
-                        //     .attr("height", 30)
-                        //     .attr("width", 40);
->>>>>>> ec42fc058f9a71a7b344a404e0fe0e6cc7076fc3
+                            .attr("height", 15)
+                            .attr("width",20);
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
