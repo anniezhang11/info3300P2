@@ -136,7 +136,7 @@ d3.json("countrycodes.json", function (data) {
 })
 
 function getCountryCode2(countryCode3) {
-     return codes[0].countryCode3.toLowerCase();
+    return codes[0][countryCode3];
 }
 
 function highlight(series) {
@@ -756,7 +756,11 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select("#flag")
                             // .attr("src",  function(d) { return d.img;})
-                            .attr("src",  function(d) { return "flags/" + "ad" + ".svg"})
+                            .attr("src",  function() { 
+                                var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
+                                console.log(getCountryCode2(code3));
+                                return "flags/" + getCountryCode2(code3) + ".svg";
+                            })
                             .attr("x", xPosition + 250)
                             .attr("y", yPosition + 10)
                             .attr("height", 30)
