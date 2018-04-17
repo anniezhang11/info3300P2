@@ -384,6 +384,16 @@ function drawSatellites(data, x_scale) {
             .text(breakdowns[i+1].toString());
     }
 
+    g.append("text")
+        .attr("x", -15)
+        .attr("y", this_y_scale(190000))
+        .attr("text-anchor", "end")
+        .attr("alignment-baseline", "middle")
+        .attr("fill", "#85858d")
+        .attr("font-family", "Rajdhani")
+        .attr("font-size", "16px")
+        .text("Alt. (km)");
+
     // draws each satellite
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
