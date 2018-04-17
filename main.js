@@ -146,12 +146,6 @@ function highlight(series) {
 
 function satelliteCallback(err, data) {
     satelliteData = data;
-<<<<<<< HEAD
-    // console.log(gdpData);
-    // console.log(satelliteData);
-=======
->>>>>>> 85473d3820b30a3c63da65f852c78804cf065e9f
-
     drawBars(satelliteData);
     
     // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
@@ -508,10 +502,6 @@ function drawSatellites(data, x_scale) {
 
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start) + x_start;
-<<<<<<< HEAD
-            
-=======
->>>>>>> 85473d3820b30a3c63da65f852c78804cf065e9f
             var_name_str = "y_scale_" + breakdowns[satellite.altitudeCategory].toString() + "to" + breakdowns[satellite.altitudeCategory+1].toString();
             var this_y_scale = eval(var_name_str);
             y_coord = this_y_scale(satellite.altitude);
