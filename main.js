@@ -790,20 +790,9 @@ function drawSatellites(data, x_scale) {
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
 
-<<<<<<< HEAD
-// function sliderHandler() {
-//     var yearSlider = document.getElementById("yearslider");
-//     var sliderLabel = document.getElementById("sliderlabel");
-//     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-//     d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
-//     d3.select("#gdpBars").selectAll("g").remove();
-//     drawBars(byCountry);
-// }
-=======
 function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
     d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);    
 }
->>>>>>> 71b23c40f4f225ee9b54eb9614adfa34ad43ff04
