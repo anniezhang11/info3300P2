@@ -337,6 +337,76 @@ function drawBars(byCountry) {
             d3.select("#bartooltip").classed("hidden", true);
             d3.select(this).attr("opacity", 0.7);
         });
+
+    // create footer
+    var footer = d3.select("#svgFooter");
+    var padding = 0,
+        margin = {top: 0, right: 20, bottom: 0, left: 100},
+        width = 1000,
+        height = 50;
+    var footerBars = footer.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    footerBars.selectAll(".bar")
+        .data(topTenData)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.accumulateSatellites); })
+        .attr("y", function(d) { return 0; })
+        .attr("width", function(d) { return x(d.proportionSatellites);})
+        .attr("height", 50)
+        .attr("fill", function(d) { return d.color; })
+        .attr("opacity", 0.7)
+        .on("mouseover", function(d) {
+            d3.select(this).attr("opacity", 1);
+            d3.selectAll("node").filter(function(d) {
+                return d.key == data.key;
+            })
+            .style("opacity", 1);
+        })
+        .on("mouseout", function() {
+            d3.select(this).attr("opacity", 0.7);
+        });
+    footerBars.enter().append("text")
+        .text(function(d) {return d.country; });
+
+    
+    // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
+
+    window.onscroll = function() {stickHeadFunc()};
+    var header = document.getElementById("legendbar");
+    // var divFooter = document.getElementById("divFooter");
+    function stickHeadFunc(){
+        if (window.pageYOffset >= 204){  
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    };
+
+    // window.onscroll = function() {stickFootFunc()};
+    // var divFooter = document.getElementById("divFooter");
+    // function stickFootFunc(){
+    //     if (window.pageYOffset <= 2000) {
+    //         divFooter.classList.add("stickyBelow");
+    //     } else {
+    //         divFooter.classList.remove("stickyBelow");
+    //     }
+    // };
+    // implement a sticky footer, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
+    // var winHeight = window.innerHeight;
+    // var bodyHeight = document.body.offsetHeight;
+    // window.onscroll = function() {stickFootFunc()};
+    // var divFooter = document.getElementById("divFooter");
+    // var stickyBelow = footer.offset;
+    //     function stickFootFunc(){
+    //         if (window.pageYOffset >= 204){  
+    //             divFooter.classList.add("stickyBelow");
+    //         }
+    //         else{
+    //             divFooter.classList.remove("stickyBelow");
+    //         }
+    //     };
+
     drawSatellites(topTenData, x);
 }
 
@@ -672,7 +742,7 @@ function drawSatellites(data, x_scale) {
                             .text(satellite.countryContractor);
                         d3.select("#flag")
                             // .attr("src",  function(d) { return d.img;})
-                            .attr("src",  "flags/ad.svg")
+                            .attr("src",  function(d) { return "flags/" + ad + ".svg"})
                             .attr("x", xPosition + 250)
                             .attr("y", yPosition + 10)
                             .attr("height", 30)
@@ -693,7 +763,7 @@ function drawSatellites(data, x_scale) {
             
         });
     });
-}
+};
 
 // Create a d3 force simulation
                 // var simulation = d3.forceSimulation();
@@ -720,9 +790,20 @@ function drawSatellites(data, x_scale) {
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
 
+<<<<<<< HEAD
+// function sliderHandler() {
+//     var yearSlider = document.getElementById("yearslider");
+//     var sliderLabel = document.getElementById("sliderlabel");
+//     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
+//     d3.select("#gdpBars").selectAll("g").selectAll("rect").remove();
+//     d3.select("#gdpBars").selectAll("g").remove();
+//     drawBars(byCountry);
+// }
+=======
 function sliderHandler() {
     var yearSlider = document.getElementById("yearslider");
     var sliderLabel = document.getElementById("sliderlabel");
     sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
     d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);    
 }
+>>>>>>> 71b23c40f4f225ee9b54eb9614adfa34ad43ff04
