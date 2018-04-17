@@ -3,6 +3,18 @@ var satelliteData;
 var topTenData = [];
 var byCountry;
 
+//parse country codes for flags in tooltips
+var codes;
+d3.json("countrycodes.json", function (data) {
+    codes = data;
+});
+
+// converts 3 letter country code to 2 letter country code
+function getCountryCode2(countryCode3) {
+    return codes[0][countryCode3];
+}
+
+// sums an array
 function arrSum(total, num) {
     return total + num;
 }
@@ -105,7 +117,7 @@ function parseSatelliteRow(row) {
     return {
         name: row["Current Official Name of Satellite"],
         series: row["Series"],
-        countryOperator: country, //gdp
+        countryOperator: country, // used for gdp
         countryContractor: row["Country of Contractor"],
         user: row["Users"],
         purpose: row["Purpose"],
@@ -129,67 +141,49 @@ function customCompare(a,b) {
     return 0;
 }
 
-//parse country codes for flags in tooltips
-var codes;
-d3.json("countrycodes.json", function (data) {
-    codes = data;
-})
-
-function getCountryCode2(countryCode3) {
-    return codes[0][countryCode3];
+// checkmark listener
+function changeFunc(){
+    d3.select("#satellites").selectAll("circle").remove();
+    d3.select("#satellites").selectAll("path").remove();
+    d3.select("#satellites").selectAll("rect").remove();
+    drawBars(satelliteData);
 }
 
-function highlight(series) {
-    if (series == null) d3.selectAll(".node").classed("active", false);
-    else d3.selectAll(".node." + series).classed("active", true);
+// adjusts both svgs on slider input
+function sliderHandler() {
+    var yearSlider = document.getElementById("yearslider");
+    var sliderLabel = document.getElementById("sliderlabel");
+    sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
+    drawBars(satelliteData);   
+}
+
+// implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
+window.onscroll = function() { stickHeadFunc() };
+
+function stickHeadFunc(){
+    var header = document.getElementById("legendbar");
+    if (window.pageYOffset >= 204){  
+        header.classList.add("sticky");
+    } else {
+        header.classList.remove("sticky");
+    }
 }
 
 function satelliteCallback(err, data) {
     satelliteData = data;
     drawBars(satelliteData);
-    
-    // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
 
-    window.onscroll = function() {stickFunc()};
-    var header = document.getElementById("legendbar");
-    var sticky = header.offsetTop;
-    function stickFunc(){
-
-        if (window.pageYOffset >= 204){  
-            header.classList.add("sticky");
-        }
-        else{
-            header.classList.remove("sticky");
-        }
-    };
-
+    // define checkmark listeners
     commCheck = document.getElementById("commercialCheck");
-    commCheck.onchange = function(){
-        changeFunc();
-    };
+    commCheck.onchange = function(){ changeFunc(); };
     civilCheck = document.getElementById("civilCheck");
-    civilCheck.onchange = function(){
-        changeFunc();
-    };
+    civilCheck.onchange = function(){ changeFunc(); };
     militaryCheck = document.getElementById("militaryCheck");
-    militaryCheck.onchange = function(){
-        changeFunc();
-    };
+    militaryCheck.onchange = function(){ changeFunc(); };
     governmentCheck = document.getElementById("governmentCheck");
-    governmentCheck.onchange = function(){
-        changeFunc();
-    };
+    governmentCheck.onchange = function(){ changeFunc(); };
     multipleCheck = document.getElementById("multipleCheck");
-    multipleCheck.onchange = function(){
-        changeFunc();
-
-    };
-    function changeFunc(){
-        d3.select("#satellites").selectAll("circle").remove();
-        d3.select("#satellites").selectAll("path").remove();
-        d3.select("#satellites").selectAll("rect").remove();
-        drawBars(satelliteData);
-    };
+    multipleCheck.onchange = function(){ changeFunc(); };
 }
 
 function drawBars(satelliteData) {
@@ -228,74 +222,31 @@ function drawBars(satelliteData) {
         idx++;
     }
 
-    // group the remainder into a single category
-    // var remainder = byCountry.splice(12);
-
-    // function findWithAttr(array, attr, value) {
-    //     for(var i = 0; i < array.length; i += 1) {
-    //         if(array[i][attr] === value) {
-    //             return i;
-    //         }
-    //     }
-    //     return -1;
-    // };
-
-    // var mult_idx = findWithAttr(byCountry, "key", "Multinational");
-    // remainder.push(byCountry[mult_idx]);
-    // var esa_idx = findWithAttr(byCountry, "key", "ESA");
-    // remainder.push(byCountry[esa_idx]);
-    // // console.log(remainder);
-
-    // var flatRemainder = [];
-    // function flatten(array) {
-    //     for (var i=0; i < array.length; i++) {
-    //         var current = array[i].values;
-    //         for (var j=0; j < current.length; j++) {
-    //             flatRemainder.push(current[j])
-    //         }
-    //     }
-    //     return flatRemainder;
-    // }
-    // flatten(remainder);
-    // topTen.push({key: "Other", values: flatRemainder});
-
     // calculate total satellites
     var totalSatellites = 0;
     for (var i=0; i < count; i++) {
         totalSatellites += topTen[i].values.length;
     };
-    // console.log(totalSatellites);
     topTenData = [];
     // organizing top ten country data for the gdp bar chart
     var thisCountryData;
     var acc = 0;
     var colors = ["#7f2962", "#ac1e4e", "#ef4351", "#f79a62", "#fcd017", "#c0cf2f", "#5eb182", "#50b4ba", "#007ec3", "#3a4ea1", "#c1c1c1"];
     for (var i=0; i < count; i++) {
-        // if (topTen[i].key !== "Other") {
-            thisCountryData = {
-                name: topTen[i].key,
-                numberSatellites: topTen[i].values.length,
-                proportionSatellites: (topTen[i].values.length/totalSatellites),
-                accumulateSatellites: acc,
-                gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[document.getElementById("yearslider").value]),
-                satellites: topTen[i].values, 
-                color: colors[i]
-            };
-        // } else {
-        //     thisCountryData = {
-        //         name: topTen[i].key,
-        //         numberSatellites: topTen[i].values.length,
-        //         proportionSatellites: (topTen[i].values.length/totalSatellites),
-        //         accumulateSatellites: acc,
-        //         gdp: 0,
-        //         satellites: topTen[i].values, 
-        //         color: colors[i]
-        //     };
-        // }
+        thisCountryData = {
+            name: topTen[i].key,
+            numberSatellites: topTen[i].values.length,
+            proportionSatellites: (topTen[i].values.length/totalSatellites),
+            accumulateSatellites: acc,
+            gdp: (gdpData.find(x => x.countryName == topTen[i].key).GDP[document.getElementById("yearslider").value]),
+            satellites: topTen[i].values, 
+            color: colors[i]
+        };
         topTenData.push(thisCountryData);
         acc += topTen[i].values.length/totalSatellites;
     }
 
+    // clears any previously drawn figures
     d3.select("#gdpbars").selectAll("rect").remove();
     d3.select("#gdpbars").selectAll("g").remove();
     d3.select("#satellites").selectAll("circle").remove();
@@ -333,7 +284,6 @@ function drawBars(satelliteData) {
             d3.select("#country")
                 .text(d.name);
             d3.select("#flag-bar")
-                // .attr("src",  function(d) { return d.img;})
                 .attr("src",  function() { 
                     var code3 = gdpData.find(x => x.countryName == d.name).countryCode;
                     return "flags/" + getCountryCode2(code3) + ".svg";
@@ -375,82 +325,11 @@ function drawBars(satelliteData) {
         .attr("font-family", "Rajdhani")
         .attr("font-size", "16px")
         .text("GDP");
-
-    // create footer
-    // var footer = d3.select("#svgFooter");
-    // var padding = 0,
-    //     margin = {top: 0, right: 20, bottom: 0, left: 100},
-    //     width = 1000,
-    //     height = 50;
-    // var footerBars = footer.append("g")
-    //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    // footerBars.selectAll(".bar")
-    //     .data(topTenData)
-    //     .enter().append("rect")
-    //     .attr("class", "bar")
-    //     .attr("x", function(d) { return x(d.accumulateSatellites); })
-    //     .attr("y", function(d) { return 0; })
-    //     .attr("width", function(d) { return x(d.proportionSatellites);})
-    //     .attr("height", 50)
-    //     .attr("fill", function(d) { return d.color; })
-    //     .attr("opacity", 0.7)
-    //     .on("mouseover", function(d) {
-    //         d3.select(this).attr("opacity", 1);
-    //         d3.selectAll("node").filter(function(d) {
-    //             return d.key == data.key;
-    //         })
-    //         .style("opacity", 1);
-    //     })
-    //     .on("mouseout", function() {
-    //         d3.select(this).attr("opacity", 0.7);
-    //     });
-    // footerBars.enter().append("text")
-    //     .text(function(d) {return d.country; });
-
     
-    // implement a sticky header, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
-
-    window.onscroll = function() {stickHeadFunc()};
-    var header = document.getElementById("legendbar");
-    // var divFooter = document.getElementById("divFooter");
-    function stickHeadFunc(){
-        if (window.pageYOffset >= 204){  
-            header.classList.add("sticky");
-        } else {
-            header.classList.remove("sticky");
-        }
-    };
-
-    // window.onscroll = function() {stickFootFunc()};
-    // var divFooter = document.getElementById("divFooter");
-    // function stickFootFunc(){
-    //     if (window.pageYOffset <= 2000) {
-    //         divFooter.classList.add("stickyBelow");
-    //     } else {
-    //         divFooter.classList.remove("stickyBelow");
-    //     }
-    // };
-    // implement a sticky footer, adapted from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sticky_header
-    // var winHeight = window.innerHeight;
-    // var bodyHeight = document.body.offsetHeight;
-    // window.onscroll = function() {stickFootFunc()};
-    // var divFooter = document.getElementById("divFooter");
-    // var stickyBelow = footer.offset;
-    //     function stickFootFunc(){
-    //         if (window.pageYOffset >= 204){  
-    //             divFooter.classList.add("stickyBelow");
-    //         }
-    //         else{
-    //             divFooter.classList.remove("stickyBelow");
-    //         }
-    //     };
-
     drawSatellites(topTenData, x);
 }
 
-
 function drawSatellites(data, x_scale) {
-    // console.log(data);
     // for each country
     var margin = {top: 0, right: 20, bottom: 20, left: 100},
         width = 1000,
@@ -478,7 +357,6 @@ function drawSatellites(data, x_scale) {
         rangeMin = height - increments.slice(0, i+2).reduce(arrSum);
         var_val_str = "d3.scaleLinear().range(["+ rangeMax +","+ rangeMin +"]).domain([" + breakdowns[i] + "," + breakdowns[i+1] + "])";
         eval(var_name_str + " = " + var_val_str);
-        // var ans = eval(var_name_str + "(300)");
         this_y_scale = eval(var_name_str);
         var offset = 30;
         if (breakdowns[i+1] >= 100000) {
@@ -504,25 +382,13 @@ function drawSatellites(data, x_scale) {
             .attr("font-family", "Rajdhani")
             .attr("font-size", "16px")
             .text(breakdowns[i+1].toString());
-        
-        // insert annotations for orbit levels: LEO at 2000km
-        // if (breakdowns[i+1] = 2000) {
-        //     g.append("line")
-        //     .attr("x1", 0)
-        //     .attr("x2", width)
-        //     .attr("y1", this_y_scale(2000))
-        //     .attr("y2", this_y_scale(2000))
-        //     .attr("stroke", "#ffffff")
-        //     .attr("stroke-width", "10px");
-        // }
     }
 
-
+    // draws each satellite
     data.forEach(element => {
         x_start = x_scale(element.accumulateSatellites);
         x_end = x_scale(element.accumulateSatellites + element.proportionSatellites);
         var svgDim = svgSat.node().getBoundingClientRect();
-        // console.log(svgDim.width);
 
         element.satellites.forEach(satellite => {
             x_coord = Math.random() * (x_end-x_start) + x_start;
@@ -542,18 +408,9 @@ function drawSatellites(data, x_scale) {
                     .attr("fill", element.color)
                     .attr("stroke", element.color)
                     .attr("opacity", 0.7)
-                    // .attr("class", function(d) { return "node " + d.series})
                     .on("mouseover", function() {
                         var xPosition = (parseFloat(d3.select(this).attr("cx"))+20)*(svgDim.width/1200);
-                        // console.log(parseFloat(d3.select(this).attr("cx")));
-                         // + parseFloat(d3.select(this).attr("r")) + 15;
                         var yPosition = (parseFloat(d3.select(this).attr("cy")) + 50)*(svgDim.height/2000);
-                        // console.log(yPosition);
-                        // if(xPosition > (document.getElementById("content").offsetWidth)/2){
-                        //     xPosition = xPosition - (230+parseFloat(d3.select(this).attr("r")));
-                        // }
-                        // console.log("xPos=" + xPosition);
-                        // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -574,16 +431,13 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#flag-sat")
-                            // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
-                                console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
                             .attr("height", 15)
                             .attr("width",20);
                         d3.select("#sattooltip").classed("hidden", false);
-                        // highlight(d.series);
                     })
                     .on("mouseout", function() {
                         d3.select(this).attr("opacity", .7);
@@ -611,15 +465,7 @@ function drawSatellites(data, x_scale) {
                     .attr("opacity", 0.7)
                 .on("mouseover", function() {
                         var xPosition = (parseFloat(x3)+20)*(svgDim.width/1200);
-                        var yPosition = (parseFloat(y3) + 50)*(svgDim.height/2000);
-                          // + document.getElementById("intro").offsetHeight + 350;
-
-                        // if(xPosition> (document.getElementById("content").offsetWidth)/2){
-
-                        //     xPosition = xPosition - 230;
-                        // }
-                        // console.log("xPos=" + xPosition);
-                        // console.log(parseFloat(d3.select(this).attr("cx")));
+                        var yPosition = (parseFloat(y3)+50)*(svgDim.height/2000);
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -640,10 +486,8 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#flag-sat")
-                            // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
-                                console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
                             .attr("height", 15)
@@ -669,12 +513,6 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = (parseFloat(d3.select(this).attr("x"))+20)*(svgDim.width/1200);
                         var yPosition = (parseFloat(d3.select(this).attr("y")) + 50)*(svgDim.height/2000);
-                         // + document.getElementById("intro").offsetHeight + 350;
-                        // if(xPosition> (document.getElementById("content").offsetWidth)/2){
-                        //     xPosition = xPosition - 230;
-                        // }
-                        // console.log("xPos=" + xPosition);
-                        // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -695,10 +533,8 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#flag-sat")
-                            // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
-                                console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
                             .attr("height", 15)
@@ -726,12 +562,6 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = (parseFloat(d3.select(this).attr("x"))+20)*(svgDim.width/1200);
                         var yPosition = (parseFloat(d3.select(this).attr("y")) + 50)*(svgDim.height/2000);
-                         // + document.getElementById("intro").offsetHeight + 350;
-                        // if(xPosition> (document.getElementById("content").offsetWidth)/2){
-                        //     xPosition = xPosition - 230;
-                        // }
-                        // console.log("xPos=" + xPosition);
-                        // console.log(parseFloat(d3.select(this).attr("cx")));
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -752,10 +582,8 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#flag-sat")
-                            // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
-                                console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
                             .attr("height", 15)
@@ -795,10 +623,6 @@ function drawSatellites(data, x_scale) {
                     .on("mouseover", function() {
                         var xPosition = (parseFloat(x5)+20)*(svgDim.width/1200);
                         var yPosition = (parseFloat(y5) + 50)*(svgDim.height/2000);
-                          // + document.getElementById("intro").offsetHeight + 350;
-                        // if(xPosition> (document.getElementById("content").offsetWidth)/2){
-                        //     xPosition = xPosition - 250;
-                        // }
                         d3.select("#sattooltip")
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
@@ -817,10 +641,8 @@ function drawSatellites(data, x_scale) {
                         d3.select("#contractor")
                             .text(satellite.countryContractor);
                         d3.select("#flag-sat")
-                            // .attr("src",  function(d) { return d.img;})
                             .attr("src",  function() { 
                                 var code3 = gdpData.find(x => x.countryName == satellite.countryOperator).countryCode;
-                                console.log(getCountryCode2(code3));
                                 return "flags/" + getCountryCode2(code3) + ".svg";
                             })
                             .attr("height", 15)
@@ -828,49 +650,20 @@ function drawSatellites(data, x_scale) {
                         d3.select(this).attr("opacity", 1);
                         d3.select(this).style("stroke", "white");
                         d3.select("#sattooltip").classed("hidden", false);
-                        })
-                        .on("mouseout", function() {
-                            d3.select(this).attr("opacity", .7);
-                            d3.select(this).style("stroke", "none");
-                            d3.select("#sattooltip").classed("hidden", true);
-                        });
-
-                
-            
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).attr("opacity", .7);
+                        d3.select(this).style("stroke", "none");
+                        d3.select("#sattooltip").classed("hidden", true);
+                    });
             }
-            
         });
     });
-};
-
-// Create a d3 force simulation
-                // var simulation = d3.forceSimulation();
-                // var node = d3.selectAll("node");
-                // simulation.force("x", d3.forceX(d => x_scale(d.x)).strength(0.5)) // default strength is 0.1
-                // .force("y", d3.forceY(d => y_scale(d.y)))
-                // .force("collision", d3.forceCollide(d => rScale(d.b)));
-
-                // simulation.nodes(node).on("tick", updateDisplay);
-
-                // updateDisplay();
-
-                // function updateDisplay() {
-                //     node
-                //     .attr("x", function(d) { return d.x; })
-                //     .attr("y", function(d) { return d.y; });
-                // }
-
-// implement range slider
+}
 
 // Load data from csv
 // Call callbacks to generate images
-
 d3.csv("gdpGood.csv", parseGdpRow, gdpCallback);
 d3.csv("satellites.csv", parseSatelliteRow, satelliteCallback);
 
-function sliderHandler() {
-    var yearSlider = document.getElementById("yearslider");
-    var sliderLabel = document.getElementById("sliderlabel");
-    sliderLabel.innerHTML =  "&#8672;     SELECT YEAR RANGE (1974-"+ yearSlider.value +")";
-    drawBars(satelliteData);   
-}
+
