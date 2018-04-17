@@ -162,7 +162,7 @@ window.onscroll = function() { stickHeadFunc() };
 
 function stickHeadFunc(){
     var header = document.getElementById("legendbar");
-    if (window.pageYOffset >= 204){  
+    if (window.pageYOffset >= 290){  
         header.classList.add("sticky");
     } else {
         header.classList.remove("sticky");
